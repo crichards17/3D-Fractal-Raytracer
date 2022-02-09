@@ -5,25 +5,34 @@
         #region private fields
         // Camera position
         private Vector pos;
-        // Camera angle
-        private Vector angle;
+        // Frustrum angle
+        private Vector frusAng;
+        // Camera rotation angle - vector aligns to the top center of the screen
+        private Vector topAngle;
         // Frustrum length
-        private double frus;
-        // Viewport height
-        private double vHeight;
+        private double frusLen;
         // Viewport width
         private double vWidth;
+        // Viewport height
+        private double vHeight;
+        // Display width in pixels
+        private int dWidth;
+        // Display height in pixels
+        private int dHeight;
         #endregion
 
-        public Camera(Vector pos, Vector angle, double frus, double vHeight, double vWidth)
+        public Camera(Vector pos, Vector frusAng, Vector topAngle, double frusLen, double vWidth, double vHeight, int dWidth, int dHeight)
         {
             this.pos = pos;
-            this.angle = angle;
-            this.frus = frus;
-            this.vHeight = vHeight;
+            this.frusAng = frusAng;
+            this.topAngle = topAngle;
+            this.frusLen = frusLen;
             this.vWidth = vWidth;
+            this.vHeight = vHeight;
+            this.dWidth = dWidth;
+            this.dHeight = dHeight;
         }
-        
+
         public Vector RayForPixel(uint x, uint y)
         {
             //TODO: Math
