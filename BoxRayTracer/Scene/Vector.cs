@@ -38,6 +38,28 @@
         }
 
         /// <summary>
+        /// Returns the dot product of the instance Vector
+        ///     and the param Vector b
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public Double Dot(Vector b)
+        {
+            return (this.x * b.x + this.y * b.y + this.z + b.z);
+        }
+
+        /// <summary>
+        /// Returns the projection of the instance Vector
+        ///     onto the param Vector b
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public Vector Proj(Vector b)
+        {
+            return this.Dot(b) / (b.Length() * b.Length()) * b;
+        }
+
+        /// <summary>
         /// Returns the unit vector equivalent for this Vector
         /// </summary>
         /// <returns></returns>
@@ -51,6 +73,7 @@
         public static Vector operator +(Vector a, Vector b) => new Vector(a.x + b.x, a.y + b.y, a.z + b.z);
         public static Vector operator -(Vector a, Vector b) => a + (-b);
         public static Vector operator *(Vector a, double b) => new Vector(a.x * b, a.y * b, a.z * b);
+        public static Vector operator *(double b, Vector a) => a * b;
         #endregion
     }
 }
