@@ -38,6 +38,17 @@
         }
 
         /// <summary>
+        /// Returns the dot product of this Vector
+        ///     and the given Vector b
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public Double Dot(Vector b)
+        {
+            return (this.x * b.x + this.y * b.y + this.z + b.z);
+        }
+
+        /// <summary>
         /// Returns the unit vector equivalent for this Vector
         /// </summary>
         /// <returns></returns>
