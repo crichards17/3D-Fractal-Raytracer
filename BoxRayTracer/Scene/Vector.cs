@@ -38,8 +38,8 @@
         }
 
         /// <summary>
-        /// Returns the dot product of this Vector
-        ///     and the given Vector b
+        /// Returns the dot product of the instance Vector
+        ///     and the param Vector b
         /// </summary>
         /// <param name="b"></param>
         /// <returns></returns>
@@ -49,14 +49,14 @@
         }
 
         /// <summary>
-        /// Returns the projection of this Vector
-        ///     onto the given Vector b
+        /// Returns the projection of the instance Vector
+        ///     onto the param Vector b
         /// </summary>
         /// <param name="b"></param>
         /// <returns></returns>
         public Vector Proj(Vector b)
         {
-            return ((this.Dot(b)) / (b.Length() * b.Length()) * b);
+            return this.Dot(b) / (b.Length() * b.Length()) * b;
         }
 
         /// <summary>
