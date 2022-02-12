@@ -58,7 +58,7 @@
 
             // PointTo the lookAt vector, with the rollTarget set to the "up" y unit vector
             // TODO: is this the correct usage of the out params?
-            PointTo(camPos, lookAt, new Vector(0,-1,0), out this.vFrus, out this.vRoll);
+            PointTo(camPos, lookAt, new Vector(0,1,0), out this.vFrus, out this.vRoll);
         }
 
         #region API
