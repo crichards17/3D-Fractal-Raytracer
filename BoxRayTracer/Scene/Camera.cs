@@ -1,4 +1,6 @@
-﻿namespace Scene
+﻿using System.Diagnostics;
+
+namespace Scene
 {
     public class Camera
     {
@@ -9,22 +11,24 @@
         private Vector vFrus;
         // Camera rotation angle (unit vector)
         private Vector vRoll;
+
+        private Vector viewOrtho;
         
         // Frustrom length
         private double frusLen;
         
         // Viewport width
-        private double vWidth;
+        private readonly double vWidth;
         // Viewport height
-        private double vHeight;
+        private readonly double vHeight;
         
         // Display width in pixels
-        private int dWidth;
+        private readonly int dWidth;
         // Display height in pixels
-        private int dHeight;
+        private readonly int dHeight;
         #endregion
 
-        public Camera(Vector camPos, Vector vFrus, Vector vRoll, double frusLen, double vWidth, double vHeight, int dWidth, int dHeight)
+        /*public Camera(Vector camPos, Vector vFrus, Vector vRoll, double frusLen, double vWidth, double vHeight, int dWidth, int dHeight)
         {
             this.camPos = camPos;
             this.vFrus = vFrus;
@@ -34,7 +38,11 @@
             this.vHeight = vHeight;
             this.dWidth = dWidth;
             this.dHeight = dHeight;
-        }
+
+            viewOrtho = vFrus.Cross(vRoll).Unit();
+
+            AssertIsConsistent();
+        }*/
 
         /// <summary>
         /// Constructor which takes a Camera position and focal point,
@@ -47,18 +55,22 @@
         /// <param name="vHeight"></param>
         /// <param name="dWidth"></param>
         /// <param name="dHeight"></param>
-        public Camera(Vector camPos, Vector lookAt, double frusLen, double vWidth, double vHeight, int dWidth, int dHeight)
+        public Camera(Vector camPos, Vector lookAt, double fov, double vWidth, double vHeight, int dWidth, int dHeight)
         {
             this.camPos = camPos;
-            this.frusLen = frusLen;
+            //this.frusLen = frusLen;
             this.vWidth = vWidth;
             this.vHeight = vHeight;
             this.dWidth = dWidth;
             this.dHeight = dHeight;
 
+            // Set the frustrum length for the given FOV
+            frusLen = vWidth / (2 * Math.Tan(Utilities.DegreesToRadians(fov / 2)));
+
             // PointTo the lookAt vector, with the rollTarget set to the "up" y unit vector
-            // TODO: is this the correct usage of the out params?
-            PointTo(camPos, lookAt, new Vector(0,1,0), out this.vFrus, out this.vRoll);
+            LookAt(lookAt, Vector.unitY);
+
+            AssertIsConsistent();
         }
 
         #region API
@@ -72,29 +84,41 @@
         /// <param name="pixelPos"></param>
         /// <param name="rayAng"></param>
         public void RayForPixel(uint x, uint y, out Vector pixelPos, out Vector rayAng)
-        {
+        {            
             // Find the top-left corner (0,0) of the viewing plane
-            Vector topL = camPos + vFrus * frusLen + vRoll * (vHeight / 2) - vFrus.Cross(vRoll).Unit() * (vWidth / 2);
+            Vector topL = camPos + vFrus * frusLen + vRoll * (vHeight / 2) - viewOrtho * (vWidth / 2);
 
             // Compute the given pixel's percentage location in the viewing plane,
             //  relative to the top-left corner
-            double pixelRelPctX = x / dWidth;
-            double pixelRelPctY = y / dHeight;
+            double pixelRelPctX = (double) x / dWidth;
+            double pixelRelPctY = (double) y / dHeight;
 
             // Compute the absolute location of the pixel using its relative position
-            pixelPos = topL + vFrus.Cross(vRoll).Unit() * (pixelRelPctX * vWidth) - vRoll * (pixelRelPctY * vHeight);
+            pixelPos = topL + viewOrtho * (pixelRelPctX * vWidth) - vRoll * (pixelRelPctY * vHeight);
 
             // Compute the unit vector from the camera to the pixel position
             rayAng = (pixelPos - camPos).Unit();
+
+            AssertIsConsistent();
         }
 
         /// <summary>
-        /// Rotates the camera to point at the focus, and sets the vRoll to "up" (-y) if possible.
+        /// Rotates the camera to point at the focus, and sets the vRoll to "up" (y) if possible.
         /// </summary>
         /// <param name="focus"></param>
-        public void LookAt(Vector focus)
+        public void LookAt(Vector focus, Vector rollTarget)
         {
-            PointTo(this.camPos, focus, this.vRoll, out this.vFrus, out this.vRoll);
+            // Find the frustrum Unit vector
+            this.vFrus = (focus - camPos).Unit();
+
+            // Set the roll vector closest to param roll vector
+            // Equation: <roll> + <Proj(<rollTarget> onto <frus>) = <rollTarget>
+            // => <roll> = <rollTarget> - <Proj(<rollTarget> onto <frus>)
+            this.vRoll = (rollTarget - rollTarget.Proj(vFrus)).Unit();
+
+            viewOrtho = vFrus.Cross(vRoll).Unit();
+
+            AssertIsConsistent();
         }
 
         /// <summary>
@@ -104,24 +128,26 @@
         public void MoveTo(Vector newPos)
         {
             this.camPos = newPos;
+
+            AssertIsConsistent();
         }
 
         #endregion
 
         #region Helpers
 
-        private static void PointTo(Vector pos, Vector focal, Vector rollTarget, out Vector frus, out Vector roll)
+        [Conditional("Debug")]
+        private void AssertIsConsistent()
         {
-            // Find the frustrum Unit vector
-            frus = (focal - pos).Unit();
-
-            // Set the roll vector closest to param roll vector
-            // Equation: <roll> + <Proj(<rollTarget> onto <frus>) = <rollTarget>
-            // => <roll> = <rollTarget> - <Proj(<rollTarget> onto <frus>)
-            roll = (rollTarget - rollTarget.Proj(frus)).Unit();
-
+            // TODO: Change 132-134 to use IsEqualApprox
+            double eps = 0.0001;
+            Debug.Assert(Math.Abs(vFrus.Length() - 1) < eps);
+            Debug.Assert(Math.Abs(vRoll.Length() - 1) < eps);
+            Debug.Assert(Math.Abs(viewOrtho.Length() - 1) < eps);
+            Debug.Assert(vFrus.IsOrtho(vRoll));
+            Debug.Assert(vFrus.IsOrtho(viewOrtho));
+            Debug.Assert(vRoll.IsOrtho(viewOrtho));
         }
-
         #endregion
 
     }

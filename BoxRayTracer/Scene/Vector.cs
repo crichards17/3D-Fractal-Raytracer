@@ -1,10 +1,13 @@
 ﻿namespace Scene
 {
-    public readonly struct Vector
+    public readonly struct Vector : IEquatable<Vector>
     {
         public readonly double x;
         public readonly double y;
         public readonly double z;
+
+        public static readonly Vector origin = new Vector(0, 0, 0);
+        public static readonly Vector unitY = new Vector(0, 1, 0);
 
         public Vector( double x, double y, double z )
         {
@@ -13,6 +16,8 @@
             this.z = z;
 
         }
+
+        #region API
 
         /// <summary>
         /// Returns the length scalar of this vector
@@ -43,7 +48,7 @@
         /// </summary>
         /// <param name="b"></param>
         /// <returns></returns>
-        public Double Dot(Vector b)
+        public double Dot(Vector b)
         {
             return (this.x * b.x + this.y * b.y + this.z + b.z);
         }
@@ -56,7 +61,7 @@
         /// <returns></returns>
         public Vector Proj(Vector b)
         {
-            return this.Dot(b) / (b.Length() * b.Length()) * b;
+            return this.Dot(b) / (Math.Pow(b.Length(),2)) * b;
         }
 
         /// <summary>
@@ -65,8 +70,51 @@
         /// <returns></returns>
         public Vector Unit()
         {
-            return new Vector(this.x / this.Length(), this.y / this.Length(), this.z / this.Length());
+            double len = this.Length();
+            return new Vector(this.x / len, this.y / len, this.z / len);
         }
+
+        /// <summary>
+        /// Returns true if the two Vectors are parallel
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public bool IsParallel(Vector b)
+        {
+            return this.Unit().IsEqualApprox(b.Unit());
+        }
+        
+        /// <summary>
+        /// Returns true if the two Vectors are orthogonal
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public bool IsOrtho(Vector b)
+        {
+            return Utilities.IsEqualApprox(this.Dot(b), 0);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is Vector vector && this.Equals(vector);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(x, y, z);
+        }
+
+        public bool Equals(Vector other)
+        {
+            return (this.x == other.x && this.y == other.y && this.z == other.z);
+        }
+
+        public bool IsEqualApprox(Vector other)
+        {
+            return (Utilities.IsEqualApprox(this.x, other.x) && Utilities.IsEqualApprox(this.y, other.y) && Utilities.IsEqualApprox(this.z, other.z));
+        }
+
+        #endregion
 
         #region operators
         public static Vector operator -(Vector a) => new Vector(-a.x, -a.y, -a.z);
