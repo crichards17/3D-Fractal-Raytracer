@@ -7,6 +7,8 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Image x:Name="imageContainer" HorizontalAlignment="Left" Height="256" Margin="264,84,0,0" VerticalAlignment="Top" Width="256"/>
+        <Button x:Name="btn_render" Content="Render" HorizontalAlignment="Center" Margin="0,39,0,0" VerticalAlignment="Top" Width="100" Height="29" Click="Button_Click"/>
 
     </Grid>
 </Window>
