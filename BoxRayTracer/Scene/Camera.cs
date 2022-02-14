@@ -120,6 +120,21 @@ namespace Scene
             AssertIsConsistent();
         }
 
+        public Vector GetPos()
+        {
+            return camPos;
+        }
+
+        public Vector GetVFrus()
+        {
+            return vFrus;
+        }
+
+        public Vector GetVRoll()
+        {
+            return vRoll;
+        }
+
         #endregion
 
         #region Helpers

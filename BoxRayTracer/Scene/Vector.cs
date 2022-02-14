@@ -109,6 +109,12 @@
             return (this.x == other.x && this.y == other.y && this.z == other.z);
         }
 
+        /// <summary>
+        /// Returns true if all components of the other Vector are within
+        ///     the Utilities.eps value of the respective component of this Vector
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public bool IsEqualApprox(Vector other)
         {
             return (Utilities.IsEqualApprox(this.x, other.x) && Utilities.IsEqualApprox(this.y, other.y) && Utilities.IsEqualApprox(this.z, other.z));

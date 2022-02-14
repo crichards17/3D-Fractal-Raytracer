@@ -48,5 +48,12 @@ namespace BoxRayTracer
             }
             return Color.Purple;
         }
+
+        public void GetSceneParams(out Vector camPos, out Vector camFrus, out Vector camRoll)
+        {
+            camPos = camera.GetPos();
+            camFrus = camera.GetVFrus();
+            camRoll = camera.GetVRoll();
+        }
     }
 }

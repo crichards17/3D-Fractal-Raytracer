@@ -7,9 +7,6 @@ using Vector = Scene.Vector;
 
 namespace BoxRayTracer
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private BitmapRaytracer bmpTracer;
@@ -17,17 +14,18 @@ namespace BoxRayTracer
         {
             InitializeComponent();
             bmpTracer = new BitmapRaytracer(new Sphere(Vector.origin, 1), 20, (int)imageContainer.Width, (int)imageContainer.Height, 90, new Vector(-5, 0, 0), Vector.origin);
+            SetParamFields();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_Render_Click(object sender, RoutedEventArgs e)
         {
             Bitmap bmp = bmpTracer.Render();
             BitmapImage bmpImg = BitmapToImageSource(bmp);
             imageContainer.Source = bmpImg;
-
+            SetParamFields();
         }
 
-        BitmapImage BitmapToImageSource(Bitmap bitmap)
+        private BitmapImage BitmapToImageSource(Bitmap bitmap)
         {
             using (MemoryStream memory = new MemoryStream())
             {
@@ -41,6 +39,28 @@ namespace BoxRayTracer
 
                 return bitmapimage;
             }
+        }
+
+        private void SetParamFields()
+        {
+            // objPos is set in the constructor (currently static at origin)
+            objPosX.Text = $"{Vector.origin.x}";
+            objPosY.Text = $"{Vector.origin.y}";
+            objPosZ.Text = $"{Vector.origin.z}";
+
+            bmpTracer.GetSceneParams(out Vector camPos, out Vector camFrus, out Vector camRoll);
+            
+            camPosX.Text = $"{camPos.x}";
+            camPosY.Text = $"{camPos.y}";
+            camPosZ.Text = $"{camPos.z}";
+
+            camFrusY.Text = $"{camFrus.y}";
+            camFrusX.Text = $"{camFrus.x}";
+            camFrusZ.Text = $"{camFrus.z}";
+
+            camRollX.Text = $"{camRoll.x}";
+            camRollY.Text = $"{camRoll.y}";
+            camRollZ.Text = $"{camRoll.z}";
         }
     }
 }
