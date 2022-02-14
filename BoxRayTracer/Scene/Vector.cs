@@ -32,13 +32,13 @@
         /// Returns the cross product between this Vector
         /// and given Vector, "b"
         /// </summary>
-        /// <param name="b"></param>
+        /// <param name="other"></param>
         /// <returns></returns>
-        public Vector Cross(Vector b)
+        public Vector Cross(Vector other)
         {
-            double cX = this.y * b.z - this.z * b.y;
-            double cY = this.z * b.x - this.x * b.z;
-            double cZ = this.x * b.y - this.y * b.x;
+            double cX = this.y * other.z - this.z * other.y;
+            double cY = this.z * other.x - this.x * other.z;
+            double cZ = this.x * other.y - this.y * other.x;
             return new Vector(cX, cY, cZ);
         }
 
@@ -46,22 +46,22 @@
         /// Returns the dot product of the instance Vector
         ///     and the param Vector b
         /// </summary>
-        /// <param name="b"></param>
+        /// <param name="other"></param>
         /// <returns></returns>
-        public double Dot(Vector b)
+        public double Dot(Vector other)
         {
-            return (this.x * b.x + this.y * b.y + this.z + b.z);
+            return (this.x * other.x + this.y * other.y + this.z + other.z);
         }
 
         /// <summary>
         /// Returns the projection of the instance Vector
         ///     onto the param Vector b
         /// </summary>
-        /// <param name="b"></param>
+        /// <param name="other"></param>
         /// <returns></returns>
-        public Vector Proj(Vector b)
+        public Vector Proj(Vector other)
         {
-            return this.Dot(b) / (Math.Pow(b.Length(),2)) * b;
+            return this.Dot(other) / (Math.Pow(other.Length(),2)) * other;
         }
 
         /// <summary>
@@ -77,11 +77,11 @@
         /// <summary>
         /// Returns true if the two Vectors are parallel
         /// </summary>
-        /// <param name="b"></param>
+        /// <param name="other"></param>
         /// <returns></returns>
-        public bool IsParallel(Vector b)
+        public bool IsParallel(Vector other)
         {
-            return this.Unit().IsEqualApprox(b.Unit());
+            return this.Unit().IsEqualApprox(other.Unit());
         }
         
         /// <summary>
@@ -89,9 +89,9 @@
         /// </summary>
         /// <param name="b"></param>
         /// <returns></returns>
-        public bool IsOrtho(Vector b)
+        public bool IsOrtho(Vector other)
         {
-            return Utilities.IsEqualApprox(this.Dot(b), 0);
+            return Utilities.IsEqualApprox(this.Dot(other), 0);
         }
 
         public override bool Equals(object? obj)
@@ -120,8 +120,8 @@
         public static Vector operator -(Vector a) => new Vector(-a.x, -a.y, -a.z);
         public static Vector operator +(Vector a, Vector b) => new Vector(a.x + b.x, a.y + b.y, a.z + b.z);
         public static Vector operator -(Vector a, Vector b) => a + (-b);
-        public static Vector operator *(Vector a, double b) => new Vector(a.x * b, a.y * b, a.z * b);
-        public static Vector operator *(double b, Vector a) => a * b;
+        public static Vector operator *(Vector v, double s) => new Vector(v.x * s, v.y * s, v.z * s);
+        public static Vector operator *(double s, Vector v) => v * s;
         #endregion
     }
 }

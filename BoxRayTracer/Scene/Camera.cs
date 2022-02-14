@@ -7,11 +7,12 @@ namespace Scene
         #region private fields
         // Camera position
         private Vector camPos;
+        
         // Frustrum angle (unit vector)
         private Vector vFrus;
         // Camera rotation angle (unit vector)
         private Vector vRoll;
-
+        // Stores the orthogonal vector to the vFrus and vRoll (unit vector)
         private Vector viewOrtho;
         
         // Frustrom length
@@ -28,21 +29,7 @@ namespace Scene
         private readonly int dHeight;
         #endregion
 
-        /*public Camera(Vector camPos, Vector vFrus, Vector vRoll, double frusLen, double vWidth, double vHeight, int dWidth, int dHeight)
-        {
-            this.camPos = camPos;
-            this.vFrus = vFrus;
-            this.vRoll = vRoll;
-            this.frusLen = frusLen;
-            this.vWidth = vWidth;
-            this.vHeight = vHeight;
-            this.dWidth = dWidth;
-            this.dHeight = dHeight;
-
-            viewOrtho = vFrus.Cross(vRoll).Unit();
-
-            AssertIsConsistent();
-        }*/
+        #region constructors
 
         /// <summary>
         /// Constructor which takes a Camera position and focal point,
@@ -50,7 +37,7 @@ namespace Scene
         /// </summary>
         /// <param name="camPos"></param>
         /// <param name="lookAt"></param>
-        /// <param name="frusLen"></param>
+        /// <param name="fov"></param>
         /// <param name="vWidth"></param>
         /// <param name="vHeight"></param>
         /// <param name="dWidth"></param>
@@ -58,20 +45,21 @@ namespace Scene
         public Camera(Vector camPos, Vector lookAt, double fov, double vWidth, double vHeight, int dWidth, int dHeight)
         {
             this.camPos = camPos;
-            //this.frusLen = frusLen;
             this.vWidth = vWidth;
             this.vHeight = vHeight;
             this.dWidth = dWidth;
             this.dHeight = dHeight;
 
             // Set the frustrum length for the given FOV
-            frusLen = vWidth / (2 * Math.Tan(Utilities.DegreesToRadians(fov / 2)));
+            this.frusLen = vWidth / (2 * Math.Tan(Utilities.DegreesToRadians(fov / 2)));
 
             // PointTo the lookAt vector, with the rollTarget set to the "up" y unit vector
             LookAt(lookAt, Vector.unitY);
 
             AssertIsConsistent();
         }
+
+        #endregion
 
         #region API
         /// <summary>
@@ -139,11 +127,9 @@ namespace Scene
         [Conditional("Debug")]
         private void AssertIsConsistent()
         {
-            // TODO: Change 132-134 to use IsEqualApprox
-            double eps = 0.0001;
-            Debug.Assert(Math.Abs(vFrus.Length() - 1) < eps);
-            Debug.Assert(Math.Abs(vRoll.Length() - 1) < eps);
-            Debug.Assert(Math.Abs(viewOrtho.Length() - 1) < eps);
+            Debug.Assert(Utilities.IsEqualApprox(vFrus.Length(), 1));
+            Debug.Assert(Utilities.IsEqualApprox(vRoll.Length(), 1));
+            Debug.Assert(Utilities.IsEqualApprox(viewOrtho.Length(), 1));
             Debug.Assert(vFrus.IsOrtho(vRoll));
             Debug.Assert(vFrus.IsOrtho(viewOrtho));
             Debug.Assert(vRoll.IsOrtho(viewOrtho));
