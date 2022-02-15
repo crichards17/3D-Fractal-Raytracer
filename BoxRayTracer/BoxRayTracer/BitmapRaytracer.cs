@@ -11,7 +11,7 @@ namespace BoxRayTracer
         private readonly int dHeight;
         private readonly double maxDist;
 
-        public BitmapRaytracer(IDistanceEstimator dE, double maxDist, int dWidth, int dHeight, int fov, Vector camPos, Vector lookAt)
+        public BitmapRaytracer(IDistanceEstimator dE, double maxDist, int dWidth, int dHeight, double fov, Vector camPos, Vector lookAt)
         {
             this.dE = dE;
             this.dWidth = dWidth;
