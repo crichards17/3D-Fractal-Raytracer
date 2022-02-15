@@ -6,14 +6,14 @@ namespace Scene
     {
         #region private fields
         // Camera position
-        private Vector camPos;
+        public Vector camPos { get; private set; }
         
         // Frustrum angle (unit vector)
-        private Vector vFrus;
+        public Vector vFrus { get; private set; }
         // Camera rotation angle (unit vector)
-        private Vector vRoll;
+        public Vector vRoll { get; private set; }
         // Stores the orthogonal vector to the vFrus and vRoll (unit vector)
-        private Vector viewOrtho;
+        public Vector viewOrtho { get; private set; }
         
         // Frustrom length
         private double frusLen;
@@ -53,7 +53,7 @@ namespace Scene
             // Set the frustrum length for the given FOV
             this.frusLen = vWidth / (2 * Math.Tan(Utilities.DegreesToRadians(fov / 2)));
 
-            // PointTo the lookAt vector, with the rollTarget set to the "up" y unit vector
+            // Point to the lookAt vector, with the rollTarget set to the "up" y unit vector
             LookAt(lookAt, Vector.unitY);
 
             AssertIsConsistent();
@@ -118,21 +118,6 @@ namespace Scene
             this.camPos = newPos;
 
             AssertIsConsistent();
-        }
-
-        public Vector GetPos()
-        {
-            return camPos;
-        }
-
-        public Vector GetVFrus()
-        {
-            return vFrus;
-        }
-
-        public Vector GetVRoll()
-        {
-            return vRoll;
         }
 
         #endregion
