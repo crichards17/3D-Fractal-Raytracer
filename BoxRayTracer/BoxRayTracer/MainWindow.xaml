@@ -119,7 +119,8 @@
                     HorizontalAlignment="Stretch" 
                     Grid.Row="1" 
                     TextWrapping="Wrap" 
-                    VerticalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    KeyDown="OnKeyDownHandler"
                     />
                 <TextBox x:Name="objPosY"
                     Text="objPosY"
@@ -127,7 +128,8 @@
                     HorizontalAlignment="Stretch" 
                     Grid.Row="2" 
                     TextWrapping="Wrap" 
-                    VerticalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    KeyDown="OnKeyDownHandler"
                     />
                 <TextBox x:Name="objPosZ"
                     Text="objPosZ"
@@ -135,7 +137,8 @@
                     HorizontalAlignment="Stretch" 
                     Grid.Row="3" 
                     TextWrapping="Wrap" 
-                    VerticalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    KeyDown="OnKeyDownHandler"
                     />
 
             </Grid>
@@ -200,7 +203,8 @@
                     HorizontalAlignment="Stretch" 
                     Grid.Row="1" 
                     TextWrapping="Wrap" 
-                    VerticalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    KeyDown="OnKeyDownHandler"
                     />
                 <TextBox x:Name="camPosY"
                     Text="camPosY"
@@ -208,7 +212,8 @@
                     HorizontalAlignment="Stretch" 
                     Grid.Row="2" 
                     TextWrapping="Wrap" 
-                    VerticalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    KeyDown="OnKeyDownHandler"
                     />
                 <TextBox x:Name="camPosZ"
                     Text="camPosZ"
@@ -216,7 +221,8 @@
                     HorizontalAlignment="Stretch" 
                     Grid.Row="3" 
                     TextWrapping="Wrap" 
-                    VerticalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    KeyDown="OnKeyDownHandler"
                     />
 
             </Grid>
@@ -281,7 +287,8 @@
                     HorizontalAlignment="Stretch" 
                     Grid.Row="1" 
                     TextWrapping="Wrap" 
-                    VerticalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    KeyDown="OnKeyDownHandler"
                     />
                 <TextBox x:Name="camFrusY"
                     Text="camFrusY"
@@ -289,7 +296,8 @@
                     HorizontalAlignment="Stretch" 
                     Grid.Row="2" 
                     TextWrapping="Wrap" 
-                    VerticalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    KeyDown="OnKeyDownHandler"
                     />
                 <TextBox x:Name="camFrusZ"
                     Text="camFrusZ"
@@ -297,7 +305,8 @@
                     HorizontalAlignment="Stretch" 
                     Grid.Row="3" 
                     TextWrapping="Wrap" 
-                    VerticalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    KeyDown="OnKeyDownHandler"
                     />
 
             </Grid>
