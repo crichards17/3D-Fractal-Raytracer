@@ -5,6 +5,7 @@ using System.Drawing;
 using Scene;
 using Vector = Scene.Vector;
 using System;
+using System.Windows.Input;
 
 namespace BoxRayTracer
 {
@@ -17,7 +18,7 @@ namespace BoxRayTracer
             RunRender();
         }
 
-        #region buttons
+        #region interaction
         private void Button_Render_Click(object sender, RoutedEventArgs e)
         {
             RunRender();
@@ -26,6 +27,14 @@ namespace BoxRayTracer
         private void Button_Default_Click(object sender, RoutedEventArgs e)
         {
             SetDefaults();
+        }
+
+        private void OnKeyDownHandler(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+            {
+                RunRender();
+            }
         }
         #endregion
 
