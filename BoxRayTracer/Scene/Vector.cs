@@ -50,7 +50,7 @@
         /// <returns></returns>
         public double Dot(Vector other)
         {
-            return (this.x * other.x + this.y * other.y + this.z + other.z);
+            return (this.x * other.x + this.y * other.y + this.z * other.z);
         }
 
         /// <summary>

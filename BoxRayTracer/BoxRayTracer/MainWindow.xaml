@@ -413,7 +413,40 @@
                     VerticalAlignment="Top">
                 </ComboBox>
             </Grid>
-            
+            <Grid x:Name="extrasGrid"
+                  Grid.Column="1"
+                  Grid.Row="3"
+                  Style="{StaticResource ControlBlock}">
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Content="FOV"
+                       Grid.Column="0"
+                       Grid.Row="0"
+                       HorizontalAlignment="Center" 
+                       VerticalAlignment="Center"
+                       VerticalContentAlignment="Top"
+                       Height="25"
+                       />
+
+                <TextBox x:Name="fovBox"
+                        Grid.Column="1"
+                        Grid.Row="0"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        KeyDown="OnKeyDownHandler"
+                        />
+
+            </Grid>
 
         </Grid>
 
