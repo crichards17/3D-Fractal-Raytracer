@@ -91,7 +91,8 @@ namespace Scene
         }
 
         /// <summary>
-        /// Rotates the camera to point at the focus, and sets the vRoll to "up" (y) if possible.
+        /// Rotates the camera to point at the focus, and sets the vRoll to
+        ///     maximize the component along the given rollTarget Vector.
         /// </summary>
         /// <param name="focus"></param>
         public void LookAt(Vector focus, Vector rollTarget)

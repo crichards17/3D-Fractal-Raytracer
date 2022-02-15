@@ -99,6 +99,8 @@ namespace BoxRayTracer
             camRollX.Text = "";
             camRollY.Text = "";
             camRollZ.Text = "";
+
+            fovBox.Text = Defaults.fov.ToString();
         }
 
         private BitmapRaytracer GetBRT()
@@ -118,7 +120,7 @@ namespace BoxRayTracer
             Vector camPos = new Vector(Double.Parse(camPosX.Text), Double.Parse(camPosY.Text), Double.Parse(camPosZ.Text));
             Vector camFrus = new Vector(Double.Parse(camFrusX.Text), Double.Parse(camFrusY.Text), Double.Parse(camFrusZ.Text));
 
-            BitmapRaytracer brt = new BitmapRaytracer(dE, Defaults.maxDist, (int)imageContainer.Width, (int)imageContainer.Height, Defaults.fov, camPos, camPos + camFrus);
+            BitmapRaytracer brt = new BitmapRaytracer(dE, Defaults.maxDist, (int)imageContainer.Width, (int)imageContainer.Height, Double.Parse(fovBox.Text), camPos, camPos + camFrus);
             return brt;
         }
 
