@@ -37,23 +37,23 @@ namespace BoxRayTracer
         {
             camera.RayForPixel(x, y, out Vector pos, out Vector rayDir);
             double currentDist = dE.DE(pos);
-            while (!Utilities.IsEqualApprox(currentDist, 0))
+            while (currentDist <= maxDist)
             {
+                if (Utilities.IsEqualApprox(currentDist, 0))
+                {
+                    return Color.Purple;
+                }
                 pos += rayDir * currentDist;
                 currentDist = dE.DE(pos);
-                if (currentDist > maxDist)
-                {
-                    return Color.Black;
-                }
             }
-            return Color.Purple;
+            return Color.Black;
         }
 
         public void GetSceneParams(out Vector camPos, out Vector camFrus, out Vector camRoll)
         {
-            camPos = camera.GetPos();
-            camFrus = camera.GetVFrus();
-            camRoll = camera.GetVRoll();
+            camPos = camera.camPos;
+            camFrus = camera.vFrus;
+            camRoll = camera.vRoll;
         }
     }
 }

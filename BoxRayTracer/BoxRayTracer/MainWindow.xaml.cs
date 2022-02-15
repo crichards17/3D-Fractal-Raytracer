@@ -10,31 +10,36 @@ namespace BoxRayTracer
 {
     public partial class MainWindow : Window
     {
-        private BitmapRaytracer bmpTracer;
         public MainWindow()
         {
             InitializeComponent();
             SetDefaults();
-            bmpTracer = GetBRT();
+            RunRender();
         }
 
+        #region buttons
         private void Button_Render_Click(object sender, RoutedEventArgs e)
         {
-            bmpTracer = GetBRT();
-            Bitmap bmp = bmpTracer.Render();
-            BitmapImage bmpImg = BitmapToImageSource(bmp);
-            imageContainer.Source = bmpImg;
-            SetParamFields();
+            RunRender();
         }
 
         private void Button_Default_Click(object sender, RoutedEventArgs e)
         {
             SetDefaults();
         }
+        #endregion
 
-        private BitmapImage BitmapToImageSource(Bitmap bitmap)
+        #region helpers
+        private void RunRender()
         {
-            using (MemoryStream memory = new MemoryStream())
+            BitmapRaytracer bmpTracer = GetBRT();
+            imageContainer.Source = BitmapToImageSource(bmpTracer.Render());
+            SetParamFields(bmpTracer);
+        }
+        
+        private static BitmapImage BitmapToImageSource(Bitmap bitmap)
+        {
+            using MemoryStream memory = new MemoryStream();
             {
                 bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
                 memory.Position = 0;
@@ -48,7 +53,7 @@ namespace BoxRayTracer
             }
         }
 
-        private void SetParamFields()
+        private void SetParamFields(BitmapRaytracer bmpTracer)
         {
             bmpTracer.GetSceneParams(out Vector camPos, out Vector camFrus, out Vector camRoll);
 
@@ -104,8 +109,10 @@ namespace BoxRayTracer
             Vector camPos = new Vector(Double.Parse(camPosX.Text), Double.Parse(camPosY.Text), Double.Parse(camPosZ.Text));
             Vector camFrus = new Vector(Double.Parse(camFrusX.Text), Double.Parse(camFrusY.Text), Double.Parse(camFrusZ.Text));
 
-            BitmapRaytracer brt = new BitmapRaytracer(dE, Defaults.maxDist, (int)imageContainer.Width, (int)imageContainer.Height, Defaults.fov, camPos, camFrus);
+            BitmapRaytracer brt = new BitmapRaytracer(dE, Defaults.maxDist, (int)imageContainer.Width, (int)imageContainer.Height, Defaults.fov, camPos, camPos + camFrus);
             return brt;
         }
+
+        #endregion
     }
 }
