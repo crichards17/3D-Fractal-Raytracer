@@ -29,9 +29,35 @@
                 <RowDefinition Height="1*" />
                 <RowDefinition Height="1*" />
                 <RowDefinition Height="1*" />
-                
+
             </Grid.RowDefinitions>
 
+            <Grid x:Name="buttons"
+                  Grid.ColumnSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                
+                <Button x:Name="btn_render" 
+                    Content="Render" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center" 
+                    Width="100" 
+                    Height="29"
+                    Click="Button_Render_Click"/>
+
+                <Button x:Name="btn_default" 
+                    Content="Reset Defaults"
+                        Grid.Row="1"
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center" 
+                    Width="100" 
+                    Height="29"
+                    Click="Button_Default_Click"/>
+            </Grid>
+            
+            
             <Grid x:Name="objectPos"
                   Grid.Column="0"
                   Grid.Row="1"
@@ -87,7 +113,7 @@
                    Grid.Column="0"
                    Grid.Row="3"
                    />
-                <TextBlock x:Name="objPosX"
+                <TextBox x:Name="objPosX"
                     Text="objPosX"
                     Grid.Column="1" 
                     HorizontalAlignment="Stretch" 
@@ -95,7 +121,7 @@
                     TextWrapping="Wrap" 
                     VerticalAlignment="Center" 
                     />
-                <TextBlock x:Name="objPosY"
+                <TextBox x:Name="objPosY"
                     Text="objPosY"
                     Grid.Column="1" 
                     HorizontalAlignment="Stretch" 
@@ -103,7 +129,7 @@
                     TextWrapping="Wrap" 
                     VerticalAlignment="Center" 
                     />
-                <TextBlock x:Name="objPosZ"
+                <TextBox x:Name="objPosZ"
                     Text="objPosZ"
                     Grid.Column="1" 
                     HorizontalAlignment="Stretch" 
@@ -168,7 +194,7 @@
                    Grid.Column="0"
                    Grid.Row="3"
                    />
-                <TextBlock x:Name="camPosX"
+                <TextBox x:Name="camPosX"
                     Text="camPosX"
                     Grid.Column="1" 
                     HorizontalAlignment="Stretch" 
@@ -176,7 +202,7 @@
                     TextWrapping="Wrap" 
                     VerticalAlignment="Center" 
                     />
-                <TextBlock x:Name="camPosY"
+                <TextBox x:Name="camPosY"
                     Text="camPosY"
                     Grid.Column="1" 
                     HorizontalAlignment="Stretch" 
@@ -184,7 +210,7 @@
                     TextWrapping="Wrap" 
                     VerticalAlignment="Center" 
                     />
-                <TextBlock x:Name="camPosZ"
+                <TextBox x:Name="camPosZ"
                     Text="camPosZ"
                     Grid.Column="1" 
                     HorizontalAlignment="Stretch" 
@@ -249,7 +275,7 @@
                    Grid.Column="0"
                    Grid.Row="3"
                    />
-                <TextBlock x:Name="camFrusX"
+                <TextBox x:Name="camFrusX"
                     Text="camFrusX"
                     Grid.Column="1" 
                     HorizontalAlignment="Stretch" 
@@ -257,7 +283,7 @@
                     TextWrapping="Wrap" 
                     VerticalAlignment="Center" 
                     />
-                <TextBlock x:Name="camFrusY"
+                <TextBox x:Name="camFrusY"
                     Text="camFrusY"
                     Grid.Column="1" 
                     HorizontalAlignment="Stretch" 
@@ -265,7 +291,7 @@
                     TextWrapping="Wrap" 
                     VerticalAlignment="Center" 
                     />
-                <TextBlock x:Name="camFrusZ"
+                <TextBox x:Name="camFrusZ"
                     Text="camFrusZ"
                     Grid.Column="1" 
                     HorizontalAlignment="Stretch" 
@@ -331,7 +357,7 @@
                    Grid.Row="3"
                    />
                 <TextBlock x:Name="camRollX"
-                    Text="camRollX"
+                    Text=""
                     Grid.Column="1" 
                     HorizontalAlignment="Stretch" 
                     Grid.Row="1" 
@@ -339,7 +365,7 @@
                     VerticalAlignment="Center" 
                     />
                 <TextBlock x:Name="camRollY"
-                    Text="camRollY"
+                    Text=""
                     Grid.Column="1" 
                     HorizontalAlignment="Stretch" 
                     Grid.Row="2" 
@@ -347,7 +373,7 @@
                     VerticalAlignment="Center" 
                     />
                 <TextBlock x:Name="camRollZ"
-                    Text="camRollZ"
+                    Text=""
                     Grid.Column="1" 
                     HorizontalAlignment="Stretch" 
                     Grid.Row="3" 
@@ -357,14 +383,28 @@
 
             </Grid>
 
-            <Button x:Name="btn_render" 
-                Content="Render" 
-                HorizontalAlignment="Center" 
-                VerticalAlignment="Center" 
-                Width="100" 
-                Height="29"
-                Grid.ColumnSpan="2"
-                Click="Button_Render_Click"/>
+            <Grid x:Name="shapeSelectorGrid"
+                  Grid.Column="0"
+                  Grid.Row="3"
+                  Style="{StaticResource ControlBlock}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+
+                <Label Content="Shape to render" 
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Bottom"
+                   VerticalContentAlignment="Center"
+                   Height="25"
+                   />
+                <ComboBox x:Name="shapeSelector"
+                    Grid.Row="1"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Top">
+                </ComboBox>
+            </Grid>
+            
 
         </Grid>
 
@@ -377,6 +417,6 @@
                 VerticalAlignment="Top" 
                 Width="256" />
         </Viewbox>
-        
+
     </Grid>
 </Window>
