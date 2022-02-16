@@ -1,5 +1,6 @@
 ﻿using Scene;
 using System;
+using System.Drawing;
 
 namespace BoxRayTracer
 {
@@ -28,5 +29,7 @@ namespace BoxRayTracer
 
         // Render defaults
         public const double maxDist = 20;
+        public const double imgWidth = 256;
+        public const double imgHeight = 256;
     }
 }

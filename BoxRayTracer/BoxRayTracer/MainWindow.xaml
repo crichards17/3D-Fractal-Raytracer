@@ -12,13 +12,13 @@
             <Setter Property = "Margin" Value="5" />
         </Style>
     </Window.Resources>
-    <Grid x:Name="container">
+    <Grid x:Name="containerGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
 
-        <Grid x:Name="controls">
+        <Grid x:Name="controlsGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="1*" />
@@ -32,8 +32,7 @@
 
             </Grid.RowDefinitions>
 
-            <Grid x:Name="buttons"
-                  Grid.ColumnSpan="2">
+            <Grid x:Name="buttonsGrid">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
@@ -56,8 +55,33 @@
                     Height="29"
                     Click="Button_Default_Click"/>
             </Grid>
+
+            <Grid x:Name="shapeSelectorGrid"
+                  Grid.Column="1"
+                  Grid.Row="0"
+                  Style="{StaticResource ControlBlock}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+
+                <Label Content="Shape" 
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Top"
+                   VerticalContentAlignment="Center"
+                   Height="25"
+                   />
+                <ComboBox x:Name="shapeSelector"
+                    Grid.Row="0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Bottom"
+                    Margin="0,0,0,3">
+                </ComboBox>
+
+            </Grid>
             
             
+
             <Grid x:Name="objectPos"
                   Grid.Column="0"
                   Grid.Row="1"
@@ -392,7 +416,7 @@
 
             </Grid>
 
-            <Grid x:Name="shapeSelectorGrid"
+            <Grid x:Name="colorsGrid"
                   Grid.Column="0"
                   Grid.Row="3"
                   Style="{StaticResource ControlBlock}">
@@ -401,18 +425,61 @@
                     <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
 
-                <Label Content="Shape to render" 
+                <Label Content="Object Color" 
                    HorizontalAlignment="Center" 
-                   VerticalAlignment="Bottom"
+                   VerticalAlignment="Top"
+                   VerticalContentAlignment="Center"
+                   Padding="0"
+                   Height="25"
+                   Grid.Row="0"
+                   />
+                <ComboBox x:Name="objColorSelector"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Bottom"
+                    Margin="0,0,0,3"
+                    Grid.Row="0">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Rectangle Fill="{Binding Name}" 
+                                       Width="10" 
+                                       Height="10" 
+                                       VerticalAlignment="Center" />
+                                <TextBlock Text="{Binding Name}"
+                                           Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <Label Content="Background Color" 
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Top"
                    VerticalContentAlignment="Center"
                    Height="25"
+                   Grid.Row="1"
+                   Padding="0"
                    />
-                <ComboBox x:Name="shapeSelector"
-                    Grid.Row="1"
+                <ComboBox x:Name="backColorSelector"
                     HorizontalAlignment="Stretch"
-                    VerticalAlignment="Top">
+                    VerticalAlignment="Bottom"
+                    Margin="0,0,0,3"
+                    Grid.Row="1">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Rectangle Fill="{Binding Name}" 
+                                       Width="10" 
+                                       Height="10" 
+                                       VerticalAlignment="Center" />
+                                <TextBlock Text="{Binding Name}"
+                                           Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
                 </ComboBox>
             </Grid>
+            
             <Grid x:Name="extrasGrid"
                   Grid.Column="1"
                   Grid.Row="3"
@@ -421,30 +488,75 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*" />
                     <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="2*"/>
-                </Grid.ColumnDefinitions>
-
                 <Label Content="FOV"
-                       Grid.Column="0"
                        Grid.Row="0"
                        HorizontalAlignment="Center" 
-                       VerticalAlignment="Center"
+                       VerticalAlignment="Top"
                        VerticalContentAlignment="Top"
                        Height="25"
                        />
 
                 <TextBox x:Name="fovBox"
+                        Grid.Row="1"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        KeyDown="OnKeyDownHandler"
+                        Margin="0,0,0,5"
+                        />
+                
+                <Label Content="Image Size"
+                       Grid.Row="2"
+                       Padding="0"
+                       HorizontalAlignment="Center" 
+                       VerticalAlignment="Top"
+                       VerticalContentAlignment="Center"
+                       Height="25"
+                       />
+
+                <Grid x:Name="resGrid"
+                            Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBlock Text="X:" 
+                               Grid.Column="0"
+                               HorizontalAlignment="Right"
+                               Margin="0,0,5,0"
+                               />
+                    <TextBox x:Name="resXBox"
                         Grid.Column="1"
-                        Grid.Row="0"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Center"
                         KeyDown="OnKeyDownHandler"
+                        Margin="0,0,0,5"
                         />
+
+                    <TextBlock Text="Y:" 
+                               Grid.Column="2"
+                               HorizontalAlignment="Right"
+                               Margin="0,0,5,0"
+                               />
+                    <TextBox x:Name="resYBox"
+                        Grid.Column="3"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        KeyDown="OnKeyDownHandler"
+                        Margin="0,0,0,5"
+                        />
+                </Grid>
+                
+                
 
             </Grid>
 
