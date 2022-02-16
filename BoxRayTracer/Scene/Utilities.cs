@@ -11,8 +11,12 @@ namespace Scene
 
         public static double DegreesToRadians(double degrees)
         {
-            double radians = (Math.PI / 180) * degrees;
-            return (radians);
+            return (Math.PI / 180) * degrees;
+        }
+
+        public static double RadiansToDegrees(double radians)
+        {
+            return radians * 180 / Math.PI;
         }
     }
 }

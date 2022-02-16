@@ -30,7 +30,7 @@
         
         /// <summary>
         /// Returns the cross product between this Vector
-        /// and given Vector, "b"
+        ///     and param Vector other
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -44,7 +44,7 @@
 
         /// <summary>
         /// Returns the dot product of the instance Vector
-        ///     and the param Vector b
+        ///     and the param Vector other
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -55,13 +55,24 @@
 
         /// <summary>
         /// Returns the projection of the instance Vector
-        ///     onto the param Vector b
+        ///     onto the param Vector other
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
         public Vector Proj(Vector other)
         {
             return this.Dot(other) / (Math.Pow(other.Length(),2)) * other;
+        }
+
+        /// <summary>
+        /// Returns the angle, in radians, between the instance Vector
+        ///     and the param Vector other
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public double GetTheta(Vector other)
+        {
+            return this.Dot(other) / (this.Length() * other.Length());
         }
 
         /// <summary>
@@ -75,7 +86,8 @@
         }
 
         /// <summary>
-        /// Returns true if the two Vectors are parallel
+        /// Returns true if the instance Vector is parallel to
+        ///     the param Vector other
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -83,9 +95,10 @@
         {
             return this.Unit().IsEqualApprox(other.Unit());
         }
-        
+
         /// <summary>
-        /// Returns true if the two Vectors are orthogonal
+        /// Returns true if the instance Vector is otrhogonal to
+        ///     the param Vector other
         /// </summary>
         /// <param name="b"></param>
         /// <returns></returns>
