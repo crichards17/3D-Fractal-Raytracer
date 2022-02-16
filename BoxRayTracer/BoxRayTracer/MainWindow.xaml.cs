@@ -42,6 +42,8 @@ namespace BoxRayTracer
         #region helpers
         private void RunRender()
         {
+            imageContainer.Width = Double.Parse(resXBox.Text);
+            imageContainer.Height = Double.Parse(resYBox.Text);
             BitmapRaytracer bmpTracer = GetBRT();
             imageContainer.Source = BitmapToImageSource(bmpTracer.Render());
             SetParamFields(bmpTracer);
@@ -108,6 +110,9 @@ namespace BoxRayTracer
             camRollZ.Text = "";
 
             fovBox.Text = Defaults.fov.ToString();
+
+            resXBox.Text = Defaults.imgWidth.ToString();
+            resYBox.Text = Defaults.imgHeight.ToString();
         }
 
         private BitmapRaytracer GetBRT()
