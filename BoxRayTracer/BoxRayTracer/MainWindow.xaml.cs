@@ -117,7 +117,7 @@ namespace BoxRayTracer
 
         private BitmapRaytracer GetBRT()
         {
-            IDistanceEstimator dE;
+            IDistanceEstimatable dE;
             switch (shapeSelector.SelectedItem) {
                 case "Sphere":
                     dE = new Sphere(new Vector(Double.Parse(objPosX.Text), Double.Parse(objPosY.Text), Double.Parse(objPosZ.Text)), Defaults.radius);
@@ -135,7 +135,8 @@ namespace BoxRayTracer
             Color objColor = (Color)(objColorSelector.SelectedItem as System.Reflection.PropertyInfo).GetValue(null, null);
             Color backColor = (Color)(backColorSelector.SelectedItem as System.Reflection.PropertyInfo).GetValue(null, null);
 
-            BitmapRaytracer brt = new BitmapRaytracer(dE, Defaults.maxDist, (int)imageContainer.Width, (int)imageContainer.Height, Double.Parse(fovBox.Text), camPos, camPos + camFrus, objColor, backColor);
+            // TODO: Pass lights from UI / state to brt
+            BitmapRaytracer brt = new (dE, Defaults.maxDist, (int)imageContainer.Width, (int)imageContainer.Height, Double.Parse(fovBox.Text), camPos, camPos + camFrus, objColor, backColor, Defaults.globalAmbient, Defaults.globalDiffuseLights, Defaults.pointLights);
             return brt;
         }
 

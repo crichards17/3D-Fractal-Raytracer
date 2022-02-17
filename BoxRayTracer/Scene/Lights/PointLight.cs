@@ -2,17 +2,19 @@
 
 namespace Scene
 {
-    public class Light_Point : IPointLight
+    public class PointLight : IPointLight
     {
-        public Color Color { get; private set; }
+        public System.Drawing.Color Color { get; private set; }
         public double Intensity { get; private set; }
         public Vector Position { get; private set; }
 
-        public Light_Point(Color color, double intensity, Vector position)
+        public PointLight(System.Drawing.Color color, double intensity, Vector position)
         {
             Color = color;
             Intensity = intensity;
             Position = position;
         }
+
+        public bool IsIlluminating(Vector pos) => true;
     }
 }
