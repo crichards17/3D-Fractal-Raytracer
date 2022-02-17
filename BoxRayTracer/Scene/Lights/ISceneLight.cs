@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace Scene
+﻿namespace Scene
 {
     public interface ISceneLight
     {

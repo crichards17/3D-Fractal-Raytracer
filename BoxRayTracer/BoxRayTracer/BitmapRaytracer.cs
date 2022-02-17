@@ -1,11 +1,12 @@
 ﻿using Scene;
 using System.Drawing;
+using Color = System.Drawing.Color;
 
 namespace BoxRayTracer
 {
     internal class BitmapRaytracer
     {
-        private readonly IDistanceEstimator dE;
+        private readonly IDistanceEstimatable dE;
         private readonly Camera camera;
         private readonly int dWidth;
         private readonly int dHeight;
@@ -13,7 +14,12 @@ namespace BoxRayTracer
         private readonly Color objColor;
         private readonly Color backColor;
 
-        public BitmapRaytracer(IDistanceEstimator dE, double maxDist, int dWidth, int dHeight, double fov, Vector camPos, Vector lookAt, System.Windows.Media.Color objColor, System.Windows.Media.Color backColor)
+        // Lights
+        private readonly AmbientLight globalAmbient;
+        private readonly GlobalDiffuseLight[] globalDiffuseLights;
+        private readonly IPointLight[] pointLights;
+
+        public BitmapRaytracer(IDistanceEstimatable dE, double maxDist, int dWidth, int dHeight, double fov, Vector camPos, Vector lookAt, System.Windows.Media.Color objColor, System.Windows.Media.Color backColor, AmbientLight globalAmbient, GlobalDiffuseLight[] globalDiffuseLights, IPointLight[] pointLights)
         {
             this.dE = dE;
             this.dWidth = dWidth;
@@ -24,6 +30,9 @@ namespace BoxRayTracer
             //  so we convert here:
             this.objColor = Color.FromArgb(objColor.A, objColor.R, objColor.G, objColor.B);
             this.backColor = Color.FromArgb(backColor.A, backColor.R, backColor.G, backColor.B);
+            this.globalAmbient = globalAmbient;
+            this.globalDiffuseLights = globalDiffuseLights;
+            this.pointLights = pointLights;
         }
 
         public Bitmap Render()
@@ -47,6 +56,7 @@ namespace BoxRayTracer
             {
                 if (Utilities.IsEqualApprox(currentDist, 0))
                 {
+                    // Do the B.P. thing, then return the color
                     return objColor;
                 }
                 pos += rayDir * currentDist;
