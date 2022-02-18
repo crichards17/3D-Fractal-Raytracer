@@ -2,7 +2,11 @@
 {
     public interface ISceneLight
     {
-        public Color Color { get; }
-        public double Intensity { get; }
+        public Color color { get; }
+        public double iAmbient { get; }
+        public double iDiffuse { get; }
+        public double iSpecular { get; }
+
+        public Vector VToLight(Vector objPos);
     }
 }

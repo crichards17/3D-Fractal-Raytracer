@@ -6,7 +6,6 @@ using Scene;
 using Vector = Scene.Vector;
 using System;
 using System.Windows.Input;
-using Color = System.Windows.Media.Color;
 
 namespace BoxRayTracer
 {
@@ -100,10 +99,10 @@ namespace BoxRayTracer
             shapeSelector.SelectedIndex = Defaults.shapeDefaultIndex;
 
             objColorSelector.ItemsSource = typeof(System.Windows.Media.Colors).GetProperties();
-            objColorSelector.SelectedItem = typeof(System.Windows.Media.Colors).GetProperty("Purple");
+            objColorSelector.SelectedItem = typeof(System.Windows.Media.Colors).GetProperty(Defaults.objColor);
 
             backColorSelector.ItemsSource = typeof(System.Windows.Media.Colors).GetProperties();
-            backColorSelector.SelectedItem = typeof(System.Windows.Media.Colors).GetProperty("Black");
+            backColorSelector.SelectedItem = typeof(System.Windows.Media.Colors).GetProperty(Defaults.backColor);
 
             camRollX.Text = "";
             camRollY.Text = "";
@@ -132,11 +131,14 @@ namespace BoxRayTracer
             Vector camPos = new Vector(Double.Parse(camPosX.Text), Double.Parse(camPosY.Text), Double.Parse(camPosZ.Text));
             Vector camFrus = new Vector(Double.Parse(camFrusX.Text), Double.Parse(camFrusY.Text), Double.Parse(camFrusZ.Text));
 
-            Color objColor = (Color)(objColorSelector.SelectedItem as System.Reflection.PropertyInfo).GetValue(null, null);
-            Color backColor = (Color)(backColorSelector.SelectedItem as System.Reflection.PropertyInfo).GetValue(null, null);
-
+            // Get Color selections from the UI color picker, convert to Scene.Color objects
+            System.Windows.Media.Color objColorMedia = (System.Windows.Media.Color)(objColorSelector.SelectedItem as System.Reflection.PropertyInfo).GetValue(null, null);
+            System.Windows.Media.Color backColorMedia = (System.Windows.Media.Color)(backColorSelector.SelectedItem as System.Reflection.PropertyInfo).GetValue(null, null);
+            Scene.Color objColorScene = new Scene.Color((double)objColorMedia.R / 255, (double)objColorMedia.G / 255, (double)objColorMedia.B / 255);
+            Scene.Color backColorScene = new Scene.Color((double)backColorMedia.R / 255, (double)backColorMedia.G / 255, (double)backColorMedia.B / 255);
+            
             // TODO: Pass lights from UI / state to brt
-            BitmapRaytracer brt = new (dE, Defaults.maxDist, (int)imageContainer.Width, (int)imageContainer.Height, Double.Parse(fovBox.Text), camPos, camPos + camFrus, objColor, backColor, Defaults.globalAmbient, Defaults.globalDiffuseLights, Defaults.pointLights);
+            BitmapRaytracer brt = new (dE, Defaults.maxDist, (int)imageContainer.Width, (int)imageContainer.Height, Double.Parse(fovBox.Text), camPos, camPos + camFrus, objColorScene, backColorScene, Defaults.sceneLights);
             return brt;
         }
 
