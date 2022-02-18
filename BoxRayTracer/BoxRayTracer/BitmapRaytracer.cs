@@ -89,7 +89,8 @@ namespace BoxRayTracer
 
                 // Specular light component:
                 // TODO: Correct to Blinn calc -- currently using Phong specular calc.
-                compoundColor += sceneLight.color * sceneLight.iSpecular * Math.Pow(Math.Max((fragPos - camera.camPos).Unit().Dot(vToLight.ReflectAbout(normal)), 0.0), 32);
+                Vector halfV = (vToLight + (camera.camPos - fragPos).Unit()).Unit();
+                compoundColor += sceneLight.color * sceneLight.iSpecular * Math.Pow(Math.Max(normal.Dot(halfV), 0.0), 32);
             }
 
 
