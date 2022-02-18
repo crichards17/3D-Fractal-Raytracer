@@ -22,5 +22,6 @@ namespace Scene
         public static Color operator +(Color a, Color b) => new Color(a.v + b.v);
         public static Color operator *(Color c, double s) => new Color(c.v * s);
         public static Color operator *(double s, Color c) => c * s;
+        public static Color operator *(Color a, Color b) => new Color(a.v.x * b.v.x, a.v.y * b.v.y, a.v.z * b.v.z);
     }
 }

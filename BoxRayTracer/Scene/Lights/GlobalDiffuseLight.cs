@@ -1,18 +1,35 @@
-﻿using System.Drawing;
-
-namespace Scene
+﻿namespace Scene
 {
     public class GlobalDiffuseLight : ISceneLight
     {
-        public System.Drawing.Color Color { get; private set; }
-        public double Intensity { get; private set; }
-        public Vector Direction { get; private set; }
+        public Color color { get; private set; }
+        public double iAmbient { get; private set; }
+        public double iDiffuse { get; private set; }    
+        public double iSpecular { get; private set; }
+        private Vector direction { get; set; }
 
-        public GlobalDiffuseLight(System.Drawing.Color color, double intensity, Vector direction)
+        public GlobalDiffuseLight(Color color, double iDiffuse, Vector direction)
         {
-            this.Color = color;
-            this.Intensity = intensity;
-            this.Direction = direction.Unit();
+            this.color = color;
+            iAmbient = 0;
+            this.iDiffuse = iDiffuse;
+            iSpecular = 0;
+
+            this.direction = direction.Unit();
+        }
+        public GlobalDiffuseLight(Color color, double iDiffuse, double iAmbient, Vector direction)
+        {
+            this.color = color;
+            this.iAmbient = iAmbient;
+            this.iDiffuse = iDiffuse;
+            iSpecular = 0;
+
+            this.direction = direction.Unit();
+        }
+
+        public Vector VToLight(Vector objPos)
+        {
+            return -direction;
         }
     }
 }

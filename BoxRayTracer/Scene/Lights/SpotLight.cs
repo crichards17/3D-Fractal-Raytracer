@@ -1,29 +1,51 @@
-﻿using System.Drawing;
-
+﻿
 namespace Scene
 {
-    public class SpotLight : IPointLight
+    public class SpotLight : ISceneLight
     {
-        public System.Drawing.Color Color { get; private set; }
-        public double Intensity { get; private set; }
-        public Vector Position { get; private set; }
-        public Vector FacingVector { get; private set; }
-        public double BoundingAngle { get; private set; } 
+        public Color color { get; private set; }
+        public double iAmbient { get; private set; }
+        public double iDiffuse { get; private set; }
+        public double iSpecular { get; private set; }
+        
+        private Vector position;
+        private Vector facingVector { get; set; }
+        private double boundingAngle { get; set; }
         // The angle, in degrees, between the facing vector and the boundary of the light cone.
         //      May want to enforce 0 <= BA <= 180 for logical behavior.
 
-        public SpotLight(System.Drawing.Color color, double intensity, Vector position, Vector facingVector, double boundingAngle)
+        public SpotLight(Color color, double iDiffuse, double iSpecular, Vector position, Vector facingVector, double boundingAngle)
         {
-            Color = color;
-            Intensity = intensity;
-            Position = position;
-            FacingVector = facingVector.Unit();
-            BoundingAngle = boundingAngle;
+            this.color = color;
+            this.iDiffuse = iDiffuse;
+            this.iSpecular = iSpecular;
+            iAmbient = 0;
+
+            this.position = position;
+            this.facingVector = facingVector;
+            this.boundingAngle = boundingAngle;
         }
 
-        public bool IsIlluminating(Vector objPos)
+        public SpotLight(Color color, double iDiffuse, double iSpecular, double iAmbient, Vector position, Vector facingVector, double boundingAngle)
         {
-            return Utilities.RadiansToDegrees((objPos - Position).GetTheta(FacingVector)) <= BoundingAngle;
+            this.color = color;
+            this.iDiffuse = iDiffuse;
+            this.iSpecular = iSpecular;
+            this.iAmbient = iAmbient;
+
+            this.position = position;
+            this.facingVector = facingVector;
+            this.boundingAngle = boundingAngle;
+        }
+
+        public Vector VToLight(Vector objPos)
+        {
+            Vector vToLight = (objPos - position).Unit();
+            if(Utilities.RadiansToDegrees(vToLight.GetTheta(facingVector)) <= boundingAngle)
+            {
+                return vToLight;
+            }
+            return Vector.origin;
         }
     }
 }
