@@ -65,6 +65,21 @@
         }
 
         /// <summary>
+        /// Returns the reflection of the instance Vector
+        ///     from the plane defined by the Vector other.
+        /// </summary>
+        /// <param name="normal"></param>
+        /// <returns></returns>
+        public Vector ReflectAbout(Vector normal)
+        {
+            if (normal.Length() == 0)
+            {
+                throw new ArgumentException("Reflection normal must be non-zero");
+            }
+                return this - 2 * this.Dot(normal) / Math.Pow(normal.Length(), 2) * normal;
+        }
+
+        /// <summary>
         /// Returns the angle, in radians, between the instance Vector
         ///     and the param Vector other
         /// </summary>
