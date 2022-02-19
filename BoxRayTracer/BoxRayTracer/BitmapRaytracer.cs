@@ -113,11 +113,17 @@ namespace BoxRayTracer
             {
                 Vector normal = dE.Normal(fragPos);
                 // Diffuse light component:
+                if (sceneLight.iDiffuse != 0)
+                {
                 compoundColor += sceneLight.color * sceneLight.iDiffuse * Math.Max(normal.Dot(vToLight), 0);
+                }
 
                 // Specular light component:
+                if (sceneLight.iSpecular != 0)
+                {
                 Vector halfV = (vToLight + (camera.camPos - fragPos).Unit()).Unit();
                 compoundColor += sceneLight.color * sceneLight.iSpecular * Math.Pow(Math.Max(normal.Dot(halfV), 0.0), 32);
+                }
             }
 
 
