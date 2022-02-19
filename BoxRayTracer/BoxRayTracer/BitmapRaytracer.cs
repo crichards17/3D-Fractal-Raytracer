@@ -33,7 +33,10 @@ namespace BoxRayTracer
         }
 
 
-
+        /// <summary>
+        /// Renders the current Scene and returns the resulting Bitmap
+        /// </summary>
+        /// <returns></returns>
         public Bitmap Render()
         {
             Bitmap image = new(dWidth, dHeight);
@@ -47,6 +50,10 @@ namespace BoxRayTracer
             return image;
         }
 
+        /// <summary>
+        /// Returns a linear array of Scene.Colors corresponding to a pixel matrx of the Scene's dWidth and dHeight.
+        /// </summary>
+        /// <returns></returns>
         private Scene.Color[] GetPixelArray()
         {
             Scene.Color[] outColors = new Scene.Color[dWidth * dHeight];
@@ -70,6 +77,12 @@ namespace BoxRayTracer
             return outColors;
         }
 
+        /// <summary>
+        /// Returns the Scene.Color result for a given pixel position.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         private Scene.Color RayMarch(uint x, uint y)
         {
             camera.RayForPixel(x, y, out Vector pos, out Vector rayDir);
@@ -92,6 +105,12 @@ namespace BoxRayTracer
             return backColor;
         }
 
+        /// <summary>
+        /// Returns camera data in the out vectors.
+        /// </summary>
+        /// <param name="camPos"></param>
+        /// <param name="camFrus"></param>
+        /// <param name="camRoll"></param>
         public void GetSceneParams(out Vector camPos, out Vector camFrus, out Vector camRoll)
         {
             camPos = camera.camPos;
@@ -99,6 +118,13 @@ namespace BoxRayTracer
             camRoll = camera.vRoll;
         }
 
+        /// <summary>
+        /// Returns the additive ambient, diffuse, and specular lighting contributions
+        ///     of the given ISceneLight on the given object fragment.
+        /// </summary>
+        /// <param name="sceneLight"></param>
+        /// <param name="fragPos"></param>
+        /// <returns></returns>
         private Scene.Color BPContribution(ISceneLight sceneLight, Vector fragPos)
         {
             Scene.Color compoundColor = new Scene.Color(0, 0, 0);
@@ -112,20 +138,30 @@ namespace BoxRayTracer
             if (!vToLight.Equals(Vector.origin))
             {
                 Vector normal = dE.Normal(fragPos);
+                
                 // Diffuse light component:
-                compoundColor += sceneLight.color * sceneLight.iDiffuse * Math.Max(normal.Dot(vToLight), 0);
+                if (sceneLight.iDiffuse != 0)
+                {
+                compoundColor += sceneLight.color * sceneLight.iDiffuse * Math.Max(normal.Dot(vToLight), 0) * objColor;
+                }
 
                 // Specular light component:
+                if (sceneLight.iSpecular != 0)
+                {
                 Vector halfV = (vToLight + (camera.camPos - fragPos).Unit()).Unit();
-                compoundColor += sceneLight.color * sceneLight.iSpecular * Math.Pow(Math.Max(normal.Dot(halfV), 0.0), 32);
+                compoundColor += sceneLight.color * sceneLight.iSpecular * Math.Pow(Math.Max(normal.Dot(halfV), 0.0), 32) * objColor;
+                }
             }
-
-
+            
             return compoundColor;
         }
 
-        // If this is going to be useful elsewhere, it could go onto the Color class.
-        //  However, seems likely to only be useful to BRT.
+        /// <summary>
+        /// Returns the System.Drawing.Color equivalent of the provided Scene.Color,
+        ///     clamped to 255 RGB.
+        /// </summary>
+        /// <param name="sceneColor"></param>
+        /// <returns></returns>
         private static System.Drawing.Color ToDrawingColor(Scene.Color sceneColor)
         {
             return System.Drawing.Color.FromArgb(255, Math.Min((int)(sceneColor.R * 255), 255), Math.Min((int)(sceneColor.G * 255), 255), Math.Min((int)(sceneColor.B * 255), 255));
