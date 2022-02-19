@@ -1,5 +1,8 @@
-﻿using Scene;
+﻿#define Parallel
+using Scene;
+using System;
 using System.Drawing;
+using System.Threading.Tasks;
 using Math = System.Math;
 
 namespace BoxRayTracer
@@ -29,20 +32,45 @@ namespace BoxRayTracer
             this.sceneLights = sceneLights;
         }
 
+
+
         public Bitmap Render()
         {
             Bitmap image = new(dWidth, dHeight);
-            for (int i = 0; i < dWidth; i++)
+            Scene.Color[] colorLinearArray = GetPixelArray();
+            for (int linearIndex = 0; linearIndex < colorLinearArray.Length; linearIndex++)
             {
-                for (int j = 0; j < dHeight; j++)
-                {
-                    image.SetPixel(i, j, RayMarch((uint)i, (uint)j));
-                }
+                int x = linearIndex % dWidth;
+                int y = linearIndex / dWidth;
+                image.SetPixel(x, y, ToDrawingColor(colorLinearArray[linearIndex]));
             }
             return image;
         }
 
-        private System.Drawing.Color RayMarch(uint x, uint y)
+        private Scene.Color[] GetPixelArray()
+        {
+            Scene.Color[] outColors = new Scene.Color[dWidth * dHeight];
+            ParallelOptions parallelOptions = new ParallelOptions();
+            parallelOptions.MaxDegreeOfParallelism = Environment.ProcessorCount;
+#if Parallel
+            Parallel.For(0, dWidth * dHeight, parallelOptions, pixelIndex =>
+            {
+#else
+            for (uint pixelIndex = 0; pixelIndex < outColors.Length; pixelIndex++)
+            {
+#endif
+                uint x = (uint)(pixelIndex % dWidth);
+                uint y = (uint)(pixelIndex / dWidth);
+                outColors[pixelIndex] = RayMarch(x, y);
+#if Parallel
+            });
+#else
+            }
+#endif
+            return outColors;
+        }
+
+        private Scene.Color RayMarch(uint x, uint y)
         {
             camera.RayForPixel(x, y, out Vector pos, out Vector rayDir);
             double currentDist = dE.DE(pos);
@@ -56,12 +84,12 @@ namespace BoxRayTracer
                     {
                         outColor += BPContribution(sceneLights[i], pos);
                     }
-                    return ToDrawingColor(outColor);
+                    return outColor;
                 }
                 pos += rayDir * currentDist;
                 currentDist = dE.DE(pos);
             }
-            return ToDrawingColor(backColor);
+            return backColor;
         }
 
         public void GetSceneParams(out Vector camPos, out Vector camFrus, out Vector camRoll)
@@ -74,10 +102,10 @@ namespace BoxRayTracer
         private Scene.Color BPContribution(ISceneLight sceneLight, Vector fragPos)
         {
             Scene.Color compoundColor = new Scene.Color(0, 0, 0);
-            
+
             // Ambient light component:
             compoundColor += sceneLight.color * sceneLight.iAmbient * objColor;
-            
+
             // Only apply Diffuse and Specular if the vector to the light source is non-zero
             //  (Enables SpotLight lighting region check, and avoids undefined light behavior)
             Vector vToLight = sceneLight.VToLight(fragPos);
@@ -88,7 +116,6 @@ namespace BoxRayTracer
                 compoundColor += sceneLight.color * sceneLight.iDiffuse * Math.Max(normal.Dot(vToLight), 0);
 
                 // Specular light component:
-                // TODO: Correct to Blinn calc -- currently using Phong specular calc.
                 Vector halfV = (vToLight + (camera.camPos - fragPos).Unit()).Unit();
                 compoundColor += sceneLight.color * sceneLight.iSpecular * Math.Pow(Math.Max(normal.Dot(halfV), 0.0), 32);
             }
@@ -101,7 +128,7 @@ namespace BoxRayTracer
         //  However, seems likely to only be useful to BRT.
         private static System.Drawing.Color ToDrawingColor(Scene.Color sceneColor)
         {
-            return System.Drawing.Color.FromArgb(255, Math.Min((int) (sceneColor.R * 255), 255), Math.Min((int) (sceneColor.G * 255), 255), Math.Min((int) (sceneColor.B * 255), 255));
+            return System.Drawing.Color.FromArgb(255, Math.Min((int)(sceneColor.R * 255), 255), Math.Min((int)(sceneColor.G * 255), 255), Math.Min((int)(sceneColor.B * 255), 255));
         }
     }
 }
