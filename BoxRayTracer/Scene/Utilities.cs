@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace Scene
 {
     public static class Utilities

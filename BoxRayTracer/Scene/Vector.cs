@@ -1,4 +1,6 @@
-﻿namespace Scene
+﻿using System;
+
+namespace Scene
 {
     public readonly struct Vector : IEquatable<Vector>
     {
