@@ -41,8 +41,8 @@ namespace BoxRayTracer
         #region helpers
         private void RunRender()
         {
-            imageContainer.Width = Double.Parse(resXBox.Text);
-            imageContainer.Height = Double.Parse(resYBox.Text);
+            imageContainer.Width = double.Parse(resXBox.Text);
+            imageContainer.Height = double.Parse(resYBox.Text);
             BitmapRaytracer bmpTracer = GetBRT();
             imageContainer.Source = BitmapToImageSource(bmpTracer.Render());
             SetParamFields(bmpTracer);
@@ -116,29 +116,34 @@ namespace BoxRayTracer
 
         private BitmapRaytracer GetBRT()
         {
-            IDistanceEstimatable dE;
-            switch (shapeSelector.SelectedItem) {
-                case "Sphere":
-                    dE = new Sphere(new Vector(Double.Parse(objPosX.Text), Double.Parse(objPosY.Text), Double.Parse(objPosZ.Text)), Defaults.radius);
-                    break;
-                // TODO: Default behavior?
-                default:
-                    dE = new Sphere(new Vector(Double.Parse(objPosX.Text), Double.Parse(objPosY.Text), Double.Parse(objPosZ.Text)), Defaults.radius);
-                    break;
+            System.Windows.Media.Color objColorMedia = (System.Windows.Media.Color)(objColorSelector.SelectedItem as System.Reflection.PropertyInfo).GetValue(null, null);
+            Scene.Color objColorScene = new Scene.Color((double)objColorMedia.R / 255, (double)objColorMedia.G / 255, (double)objColorMedia.B / 255);
+            
+            ISceneObjectEstimatable[] objects = new ISceneObjectEstimatable[1];
+            // TODO: Hook to object list and count from UI
+            for (int i = 0; i < 1; i++) 
+            { 
+                switch (shapeSelector.SelectedItem) {
+                    case "Sphere":
+                        objects[i] = new Sphere(new Vector(double.Parse(objPosX.Text), double.Parse(objPosY.Text), double.Parse(objPosZ.Text)), Defaults.radius, objColorScene);
+                        break;
+                    // TODO: Default behavior?
+                    default:
+                        break;
+                }
             }
 
             // TODO: Handle invalid text entry
-            Vector camPos = new Vector(Double.Parse(camPosX.Text), Double.Parse(camPosY.Text), Double.Parse(camPosZ.Text));
-            Vector camFrus = new Vector(Double.Parse(camFrusX.Text), Double.Parse(camFrusY.Text), Double.Parse(camFrusZ.Text));
+            Vector camPos = new Vector(double.Parse(camPosX.Text), double.Parse(camPosY.Text), double.Parse(camPosZ.Text));
+            Vector camFrus = new Vector(double.Parse(camFrusX.Text), double.Parse(camFrusY.Text), double.Parse(camFrusZ.Text));
 
             // Get Color selections from the UI color picker, convert to Scene.Color objects
-            System.Windows.Media.Color objColorMedia = (System.Windows.Media.Color)(objColorSelector.SelectedItem as System.Reflection.PropertyInfo).GetValue(null, null);
+            
             System.Windows.Media.Color backColorMedia = (System.Windows.Media.Color)(backColorSelector.SelectedItem as System.Reflection.PropertyInfo).GetValue(null, null);
-            Scene.Color objColorScene = new Scene.Color((double)objColorMedia.R / 255, (double)objColorMedia.G / 255, (double)objColorMedia.B / 255);
             Scene.Color backColorScene = new Scene.Color((double)backColorMedia.R / 255, (double)backColorMedia.G / 255, (double)backColorMedia.B / 255);
             
             // TODO: Pass lights from UI / state to brt
-            BitmapRaytracer brt = new (dE, Defaults.maxDist, (int)imageContainer.Width, (int)imageContainer.Height, Double.Parse(fovBox.Text), camPos, camPos + camFrus, objColorScene, backColorScene, Defaults.sceneLights);
+            BitmapRaytracer brt = new (objects, Defaults.maxDist, (int)imageContainer.Width, (int)imageContainer.Height, double.Parse(fovBox.Text), camPos, camPos + camFrus, backColorScene, Defaults.sceneLights);
             return brt;
         }
 

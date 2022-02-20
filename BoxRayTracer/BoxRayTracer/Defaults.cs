@@ -23,13 +23,13 @@ namespace BoxRayTracer
         public const double fov = 90;
 
         // Shape defaults
-        public static readonly String[] shapeList = new String[] { "Sphere" };
+        public static readonly string[] shapeList = new string[] { "Sphere" };
         public const int shapeDefaultIndex = 0;
         public const double radius = 1;
 
         // Color defaults
-        public static readonly String objColor = "White";
-        public static readonly String backColor = "Black";
+        public static readonly string objColor = "White";
+        public static readonly string backColor = "Black";
 
         // Render defaults
         public const double maxDist = 20;
