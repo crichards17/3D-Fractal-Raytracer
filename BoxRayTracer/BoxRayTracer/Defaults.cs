@@ -37,7 +37,6 @@ namespace BoxRayTracer
         public const double imgHeight = 512;
 
 
-
         // Light defaults
         private static readonly AmbientLight globalAmbient1 = new AmbientLight(new Color(1.0,1.0,1.0), 0.1);
         // Global soft white ambient
@@ -49,5 +48,11 @@ namespace BoxRayTracer
         // Light blue point light at (5, 5, 5)
 
         public static readonly ISceneLight[] sceneLights = new ISceneLight[] {globalAmbient1, globalDiffuseLight1, pointLight1};
+
+
+        // Object defaults
+        public static readonly Sphere sphere1 = new Sphere(Vector.origin, 1.0, new Color(1.0, 1.0, 1.0));
+        public static readonly Sphere sphere2 = new Sphere(new Vector(3, 0, -2), 1.0, new Color(1.0, 1.0, 1.0));
+        public static readonly ISceneObjectEstimatable[] sceneObjects = new ISceneObjectEstimatable[] { sphere1, sphere2 };
     }
 }
