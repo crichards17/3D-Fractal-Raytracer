@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿#define DefaultObjects
+
+using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Drawing;
@@ -118,7 +120,10 @@ namespace BoxRayTracer
         {
             System.Windows.Media.Color objColorMedia = (System.Windows.Media.Color)(objColorSelector.SelectedItem as System.Reflection.PropertyInfo).GetValue(null, null);
             Scene.Color objColorScene = new Scene.Color((double)objColorMedia.R / 255, (double)objColorMedia.G / 255, (double)objColorMedia.B / 255);
-            
+#if DefaultObjects 
+            ISceneObjectEstimatable[] objects = Defaults.sceneObjects;
+#else
+
             ISceneObjectEstimatable[] objects = new ISceneObjectEstimatable[1];
             // TODO: Hook to object list and count from UI
             for (int i = 0; i < 1; i++) 
@@ -132,6 +137,7 @@ namespace BoxRayTracer
                         break;
                 }
             }
+#endif
 
             // TODO: Handle invalid text entry
             Vector camPos = new Vector(double.Parse(camPosX.Text), double.Parse(camPosY.Text), double.Parse(camPosZ.Text));
@@ -147,6 +153,6 @@ namespace BoxRayTracer
             return brt;
         }
 
-        #endregion
+#endregion
     }
 }
