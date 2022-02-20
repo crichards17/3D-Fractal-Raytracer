@@ -9,25 +9,25 @@ namespace BoxRayTracer
 {
     internal class BitmapRaytracer
     {
-        private readonly IDistanceEstimatable dE;
         private readonly Camera camera;
         private readonly int dWidth;
         private readonly int dHeight;
         private readonly double maxDist;
-        private readonly Scene.Color objColor;
         private readonly Scene.Color backColor;
+
+        // Objects
+        private readonly ISceneObjectEstimatable[] sceneObjects;
 
         // Lights
         private readonly ISceneLight[] sceneLights;
 
-        public BitmapRaytracer(IDistanceEstimatable dE, double maxDist, int dWidth, int dHeight, double fov, Vector camPos, Vector lookAt, Scene.Color objColor, Scene.Color backColor, ISceneLight[] sceneLights)
+        public BitmapRaytracer(ISceneObjectEstimatable[] sceneObjects, double maxDist, int dWidth, int dHeight, double fov, Vector camPos, Vector lookAt, Scene.Color backColor, ISceneLight[] sceneLights)
         {
-            this.dE = dE;
+            this.sceneObjects = sceneObjects;
             this.dWidth = dWidth;
             this.dHeight = dHeight;
             this.maxDist = maxDist;
             this.camera = new Camera(camPos, lookAt, fov, 1, (double)dHeight / dWidth, dWidth, dHeight);
-            this.objColor = objColor;
             this.backColor = backColor;
             this.sceneLights = sceneLights;
         }
@@ -86,7 +86,19 @@ namespace BoxRayTracer
         private Scene.Color RayMarch(uint x, uint y)
         {
             camera.RayForPixel(x, y, out Vector pos, out Vector rayDir);
-            double currentDist = dE.DE(pos);
+            double minDist = int.MaxValue;
+            double currentDist = minDist;
+            ISceneObjectEstimatable nearestObj = sceneObjects[0];
+            for (int i = 0; i < sceneObjects.Length; i++)
+            {
+                double objDist = sceneObjects[i].DE(pos);
+                if (objDist < minDist)
+                {
+                    minDist = objDist;
+                    nearestObj = sceneObjects[i];
+                }
+            }
+            currentDist = minDist;
             while (currentDist <= maxDist)
             {
                 if (Utilities.IsEqualApprox(currentDist, 0))
@@ -95,12 +107,22 @@ namespace BoxRayTracer
                     Scene.Color outColor = new Scene.Color(0, 0, 0);
                     for (int i = 0; i < sceneLights.Length; i++)
                     {
-                        outColor += BPContribution(sceneLights[i], pos);
+                        outColor += BPContribution(sceneLights[i], pos, nearestObj);
                     }
                     return outColor;
                 }
                 pos += rayDir * currentDist;
-                currentDist = dE.DE(pos);
+                minDist = int.MaxValue;
+                for (int i = 0; i < sceneObjects.Length; i++)
+                {
+                    double objDist = sceneObjects[i].DE(pos);
+                    if (objDist < minDist)
+                    {
+                        minDist = objDist;
+                        nearestObj = sceneObjects[i];
+                    }
+                }
+                currentDist = minDist;
             }
             return backColor;
         }
@@ -125,31 +147,31 @@ namespace BoxRayTracer
         /// <param name="sceneLight"></param>
         /// <param name="fragPos"></param>
         /// <returns></returns>
-        private Scene.Color BPContribution(ISceneLight sceneLight, Vector fragPos)
+        private Scene.Color BPContribution(ISceneLight sceneLight, Vector fragPos, ISceneObjectEstimatable obj)
         {
             Scene.Color compoundColor = new Scene.Color(0, 0, 0);
 
             // Ambient light component:
-            compoundColor += sceneLight.color * sceneLight.iAmbient * objColor;
+            compoundColor += sceneLight.color * sceneLight.iAmbient * obj.color;
 
             // Only apply Diffuse and Specular if the vector to the light source is non-zero
             //  (Enables SpotLight lighting region check, and avoids undefined light behavior)
             Vector vToLight = sceneLight.VToLight(fragPos);
             if (!vToLight.Equals(Vector.origin))
             {
-                Vector normal = dE.Normal(fragPos);
+                Vector normal = obj.Normal(fragPos);
                 
                 // Diffuse light component:
                 if (sceneLight.iDiffuse != 0)
                 {
-                compoundColor += sceneLight.color * sceneLight.iDiffuse * Math.Max(normal.Dot(vToLight), 0) * objColor;
+                compoundColor += sceneLight.color * sceneLight.iDiffuse * Math.Max(normal.Dot(vToLight), 0) * obj.color;
                 }
 
                 // Specular light component:
                 if (sceneLight.iSpecular != 0)
                 {
                 Vector halfV = (vToLight + (camera.camPos - fragPos).Unit()).Unit();
-                compoundColor += sceneLight.color * sceneLight.iSpecular * Math.Pow(Math.Max(normal.Dot(halfV), 0.0), 32) * objColor;
+                compoundColor += sceneLight.color * sceneLight.iSpecular * Math.Pow(Math.Max(normal.Dot(halfV), 0.0), 32) * obj.color;
                 }
             }
             
