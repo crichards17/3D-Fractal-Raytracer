@@ -29,26 +29,25 @@ My first endeavor, before beginning development on the ray tracer, was to tackle
 
 The first objective was to set up the WPF app, as well as much of the initial rendering backend and Bitmap pipeline. The milestone here was the ability to returna an image from the raytracer (in this case, returning a single color value for all pixels) and displaying it on the front end.
 
-![Image](./Progression/Captures/02-13_Red_Box.PNG)
-<img src="https://github.com/crichards17/BoxRayTracer/blob/4ff4d3bd0dda6b0033252eb2c61a64f6f300d487/Progression/Captures/02-13%20Red%20Box.PNG?raw=true" height="100">
+<img src="https://github.com/crichards17/BoxRayTracer/blob/main/Progression/Captures/02-13_Red_Box.PNG?raw=true" height="300" name="Red_Box" style="display:block;">
 
 
 ### Imaging the first sphere via DE
 
-![Image](./Progression/Captures/02-13_First_Sphere.PNG)
+<img src="https://github.com/crichards17/BoxRayTracer/blob/main/Progression/Captures/02-13_First_Sphere.PNG?raw=true" height="300" name="First_Sphere" style="display:block;">
 
 ### Camera and object parameters implemented in the front end
 
-![Image](./Progression/Captures/02-15_Rendering_Controls.PNG)
-
+<img src="https://github.com/crichards17/BoxRayTracer/blob/main/Progression/Captures/02-15_Rendering_Controls.PNG?raw=true" height="300" name="Rendering_Controls" style="display:block;">
 
 ### Lighting model (Blinn-Phong)
 
-![Image](./Progression/Captures/02-18_First_Lighting.PNG)
+Initial implementation of the lighting model. Light interface and corresponding objects were created, and the raytracer updated to calculate lighting components (ambient, diffuse, specular) from all light sources for a given pixel.
+<img src="https://github.com/crichards17/BoxRayTracer/blob/main/Progression/Captures/02-18_First_Lighting.PNG?raw=true" height="300" name="First_Lighting" style="display:block;">
+<label for="First_Lighting">Initial lighting implementation</label>
 
-![Image](./Progression/Captures/02-18_Blinn_Specular.PNG)
-
+<img src="https://github.com/crichards17/BoxRayTracer/blob/main/Progression/Captures/02-18_Blinn_Specular.PNG?raw=true" height="300" name="Blinn_Specular" style="display:block;">
 
 ### Multiple Objects in the scene
 
-![Image](./Progression/Captures/02-19_Multiple_Objects.PNG)
+<img src="https://github.com/crichards17/BoxRayTracer/blob/main/Progression/Captures/02-19_Multiple_Objects.PNG?raw=true" height="300" name="Multiple_Objects" style="display:block;">
