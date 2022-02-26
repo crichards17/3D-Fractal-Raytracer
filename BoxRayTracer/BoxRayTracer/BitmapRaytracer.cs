@@ -80,21 +80,16 @@ namespace BoxRayTracer
         private Scene.Color ColorForPixel(uint x, uint y)
         {
             camera.RayForPixel(x, y, out Vector pos, out Vector rayDir);
-            GetNearestObject(pos, out ISceneObjectEstimatable nearestObj, out double currentDist);
-            while (currentDist <= maxDist)
+            RayMarch(pos, rayDir, out ISceneObjectEstimatable collisionObj, out Vector? fragPos);
+            if (collisionObj != null && fragPos != null)
             {
-                if (Utilities.IsEqualApprox(currentDist, 0))
+                // Do the B.P. thing
+                Scene.Color outColor = new Scene.Color(0, 0, 0);
+                for (int i = 0; i < sceneStage.sceneLights.Length; i++)
                 {
-                    // Do the B.P. thing
-                    Scene.Color outColor = new Scene.Color(0, 0, 0);
-                    for (int i = 0; i < sceneStage.sceneLights.Length; i++)
-                    {
-                        outColor += BPContribution(sceneStage.sceneLights[i], pos, nearestObj);
-                    }
-                    return outColor;
+                    outColor += BPContribution(sceneStage.sceneLights[i], fragPos.Value, collisionObj);
                 }
-                pos += rayDir * currentDist;
-                GetNearestObject(pos, out nearestObj, out currentDist);
+                return outColor;
             }
             return sceneStage.backColor;
         }
@@ -170,6 +165,24 @@ namespace BoxRayTracer
                     nearestObj = checkObj;
                 }
             }
+        }
+
+        private void RayMarch(Vector pos, Vector rayDir, out ISceneObjectEstimatable collisionObj, out Vector? fragPos)
+        {
+            GetNearestObject(pos, out ISceneObjectEstimatable nearestObj, out double currentDist);
+            while (currentDist <= maxDist)
+            {
+                if (Utilities.IsEqualApprox(currentDist, 0))
+                {
+                    collisionObj =  nearestObj;
+                    fragPos = pos;
+                    return;
+                }
+                pos += rayDir * currentDist;
+                GetNearestObject(pos, out nearestObj, out currentDist);
+            }
+            collisionObj = null;
+            fragPos = null;
         }
 
         /// <summary>
