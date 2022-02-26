@@ -18,7 +18,7 @@
         /// <param name="newObj">The scene object to be added</param>
         public void AddObject(ISceneObjectEstimatable newObj)
         {
-            sceneObjects = AddToExactArray<ISceneObjectEstimatable>(sceneObjects, newObj);
+            sceneObjects = AddToExactArray(sceneObjects, newObj);
             // Maintains an exact-length array for memory access performance.
             //  Object additions will be significantly less frequent than access requests to this array (full iteration per ray march)
         }
@@ -29,7 +29,7 @@
         /// <param name="index">Index in the sceneObjects array of the object to be removed</param>
         public void RemoveObject(int removeIdx)
         {
-            sceneObjects = RemoveFromExactArray<ISceneObjectEstimatable>(sceneObjects, removeIdx);
+            sceneObjects = RemoveFromExactArray(sceneObjects, removeIdx);
             // Maintains an exact-length array for memory access performance.
             //  Object removal will be significantly less frequent than access requests to this array (full iteration per ray march)
         }
@@ -40,7 +40,7 @@
         /// <param name="newObj">The scene Light to be added</param>
         public void AddLight(ISceneLight newLight)
         {
-            sceneLights = AddToExactArray<ISceneLight>(sceneLights, newLight);
+            sceneLights = AddToExactArray(sceneLights, newLight);
             // Maintains an exact-length array for memory access performance.
             //  Object additions will be significantly less frequent than access requests to this array (full iteration per ray march)
         }
@@ -51,7 +51,7 @@
         /// <param name="index">Index in the sceneLights array of the light to be removed</param>
         public void RemoveLight(int removeIdx)
         {
-            sceneLights = RemoveFromExactArray<ISceneLight>(sceneLights, removeIdx);
+            sceneLights = RemoveFromExactArray(sceneLights, removeIdx);
             // Maintains an exact-length array for memory access performance.
             //  Object removal will be significantly less frequent than access requests to this array (full iteration per ray march)
         }

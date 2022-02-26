@@ -58,14 +58,14 @@ namespace BoxRayTracer
 
                 uint x = (uint)(pixelIndex % dWidth);
                 uint y = (uint)(pixelIndex / dWidth);
-                outColors[pixelIndex] = RayMarch(x, y);
+                outColors[pixelIndex] = ColorForPixel(x, y);
             });
 #else
             for (uint pixelIndex = 0; pixelIndex < outColors.Length; pixelIndex++)
             {
                 uint x = (uint)(pixelIndex % dWidth);
                 uint y = (uint)(pixelIndex / dWidth);
-                outColors[pixelIndex] = RayMarch(x, y);
+                outColors[pixelIndex] = ColorForPixel(x, y);
             }
 #endif
             return outColors;
@@ -77,22 +77,10 @@ namespace BoxRayTracer
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        private Scene.Color RayMarch(uint x, uint y)
+        private Scene.Color ColorForPixel(uint x, uint y)
         {
             camera.RayForPixel(x, y, out Vector pos, out Vector rayDir);
-            double minDist = int.MaxValue;
-            double currentDist = minDist;
-            ISceneObjectEstimatable nearestObj = sceneStage.sceneObjects[0];
-            for (int i = 0; i < sceneStage.sceneObjects.Length; i++)
-            {
-                double objDist = sceneStage.sceneObjects[i].DE(pos);
-                if (objDist < minDist)
-                {
-                    minDist = objDist;
-                    nearestObj = sceneStage.sceneObjects[i];
-                }
-            }
-            currentDist = minDist;
+            GetNearestObject(pos, out ISceneObjectEstimatable nearestObj, out double currentDist);
             while (currentDist <= maxDist)
             {
                 if (Utilities.IsEqualApprox(currentDist, 0))
@@ -106,17 +94,7 @@ namespace BoxRayTracer
                     return outColor;
                 }
                 pos += rayDir * currentDist;
-                minDist = int.MaxValue;
-                for (int i = 0; i < sceneStage.sceneObjects.Length; i++)
-                {
-                    double objDist = sceneStage.sceneObjects[i].DE(pos);
-                    if (objDist < minDist)
-                    {
-                        minDist = objDist;
-                        nearestObj = sceneStage.sceneObjects[i];
-                    }
-                }
-                currentDist = minDist;
+                GetNearestObject(pos, out nearestObj, out currentDist);
             }
             return sceneStage.backColor;
         }
@@ -154,6 +132,12 @@ namespace BoxRayTracer
             Vector vToLight = sceneLight.VToLight(fragPos);
             if (!vToLight.Equals(Vector.origin))
             {
+                // Check if shadowed from light
+                // From current fragment position
+                
+                // Ray march along vToLight
+                // If collision (within eps), shadow
+
                 Vector normal = obj.Normal(fragPos);
                 
                 // Diffuse light component:
@@ -171,6 +155,21 @@ namespace BoxRayTracer
             }
             
             return compoundColor;
+        }
+
+        private void GetNearestObject(Vector pos, out ISceneObjectEstimatable nearestObj, out double minDist)
+        {
+            minDist = int.MaxValue;
+            nearestObj = sceneStage.sceneObjects[0];
+            foreach (ISceneObjectEstimatable checkObj in sceneStage.sceneObjects)
+            {
+                double objDist = checkObj.DE(pos);
+                if (objDist < minDist)
+                {
+                    minDist = objDist;
+                    nearestObj = checkObj;
+                }
+            }
         }
 
         /// <summary>

@@ -1,5 +1,4 @@
 ﻿using Scene;
-using System;
 using Color = Scene.Color;
 
 namespace BoxRayTracer
