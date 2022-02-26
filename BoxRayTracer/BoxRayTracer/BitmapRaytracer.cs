@@ -1,4 +1,4 @@
-﻿#define Parallel
+﻿// #define Singlethread
 using Scene;
 using System;
 using System.Drawing;
@@ -10,26 +10,19 @@ namespace BoxRayTracer
     internal class BitmapRaytracer
     {
         private readonly Camera camera;
+        private readonly SceneStage sceneStage;
         private readonly int dWidth;
         private readonly int dHeight;
         private readonly double maxDist;
-        private readonly Scene.Color backColor;
 
-        // Objects
-        private readonly ISceneObjectEstimatable[] sceneObjects;
 
-        // Lights
-        private readonly ISceneLight[] sceneLights;
-
-        public BitmapRaytracer(ISceneObjectEstimatable[] sceneObjects, double maxDist, int dWidth, int dHeight, double fov, Vector camPos, Vector lookAt, Scene.Color backColor, ISceneLight[] sceneLights)
+        public BitmapRaytracer(SceneStage sceneStage, double maxDist, int dWidth, int dHeight, double fov, Vector camPos, Vector lookAt)
         {
-            this.sceneObjects = sceneObjects;
+            this.camera = new Camera(camPos, lookAt, fov, 1, (double)dHeight / dWidth, dWidth, dHeight);
+            this.sceneStage = sceneStage;
             this.dWidth = dWidth;
             this.dHeight = dHeight;
             this.maxDist = maxDist;
-            this.camera = new Camera(camPos, lookAt, fov, 1, (double)dHeight / dWidth, dWidth, dHeight);
-            this.backColor = backColor;
-            this.sceneLights = sceneLights;
         }
 
 
@@ -59,19 +52,20 @@ namespace BoxRayTracer
             Scene.Color[] outColors = new Scene.Color[dWidth * dHeight];
             ParallelOptions parallelOptions = new ParallelOptions();
             parallelOptions.MaxDegreeOfParallelism = Environment.ProcessorCount;
-#if Parallel
+#if !Singlethread
             Parallel.For(0, dWidth * dHeight, parallelOptions, pixelIndex =>
             {
-#else
-            for (uint pixelIndex = 0; pixelIndex < outColors.Length; pixelIndex++)
-            {
-#endif
+
                 uint x = (uint)(pixelIndex % dWidth);
                 uint y = (uint)(pixelIndex / dWidth);
                 outColors[pixelIndex] = RayMarch(x, y);
-#if Parallel
             });
 #else
+            for (uint pixelIndex = 0; pixelIndex < outColors.Length; pixelIndex++)
+            {
+                uint x = (uint)(pixelIndex % dWidth);
+                uint y = (uint)(pixelIndex / dWidth);
+                outColors[pixelIndex] = RayMarch(x, y);
             }
 #endif
             return outColors;
@@ -88,14 +82,14 @@ namespace BoxRayTracer
             camera.RayForPixel(x, y, out Vector pos, out Vector rayDir);
             double minDist = int.MaxValue;
             double currentDist = minDist;
-            ISceneObjectEstimatable nearestObj = sceneObjects[0];
-            for (int i = 0; i < sceneObjects.Length; i++)
+            ISceneObjectEstimatable nearestObj = sceneStage.sceneObjects[0];
+            for (int i = 0; i < sceneStage.sceneObjects.Length; i++)
             {
-                double objDist = sceneObjects[i].DE(pos);
+                double objDist = sceneStage.sceneObjects[i].DE(pos);
                 if (objDist < minDist)
                 {
                     minDist = objDist;
-                    nearestObj = sceneObjects[i];
+                    nearestObj = sceneStage.sceneObjects[i];
                 }
             }
             currentDist = minDist;
@@ -105,26 +99,26 @@ namespace BoxRayTracer
                 {
                     // Do the B.P. thing
                     Scene.Color outColor = new Scene.Color(0, 0, 0);
-                    for (int i = 0; i < sceneLights.Length; i++)
+                    for (int i = 0; i < sceneStage.sceneLights.Length; i++)
                     {
-                        outColor += BPContribution(sceneLights[i], pos, nearestObj);
+                        outColor += BPContribution(sceneStage.sceneLights[i], pos, nearestObj);
                     }
                     return outColor;
                 }
                 pos += rayDir * currentDist;
                 minDist = int.MaxValue;
-                for (int i = 0; i < sceneObjects.Length; i++)
+                for (int i = 0; i < sceneStage.sceneObjects.Length; i++)
                 {
-                    double objDist = sceneObjects[i].DE(pos);
+                    double objDist = sceneStage.sceneObjects[i].DE(pos);
                     if (objDist < minDist)
                     {
                         minDist = objDist;
-                        nearestObj = sceneObjects[i];
+                        nearestObj = sceneStage.sceneObjects[i];
                     }
                 }
                 currentDist = minDist;
             }
-            return backColor;
+            return sceneStage.backColor;
         }
 
         /// <summary>
@@ -144,8 +138,9 @@ namespace BoxRayTracer
         /// Returns the additive ambient, diffuse, and specular lighting contributions
         ///     of the given ISceneLight on the given object fragment.
         /// </summary>
-        /// <param name="sceneLight"></param>
-        /// <param name="fragPos"></param>
+        /// <param name="sceneLight">Light source being evaluated</param>
+        /// <param name="fragPos">Scene-space position of the object fragment</param>
+        /// <param name="obj">Object being evaluated</param>
         /// <returns></returns>
         private Scene.Color BPContribution(ISceneLight sceneLight, Vector fragPos, ISceneObjectEstimatable obj)
         {
