@@ -85,6 +85,9 @@ namespace BoxRayTracer
 
         private void SetDefaults()
         {
+            // TODO: Will remove the need for this method
+            //  by binding UI fields to BRT properties directly.
+            //  Will set defaults on BRT initialization
             objPosX.Text = Defaults.objPosX.ToString();
             objPosY.Text = Defaults.objPosY.ToString();
             objPosZ.Text = Defaults.objPosZ.ToString();
@@ -124,13 +127,13 @@ namespace BoxRayTracer
             ISceneObjectEstimatable[] objects = Defaults.sceneObjects;
 #else
 
-            ISceneObjectEstimatable[] objects = new ISceneObjectEstimatable[1];
             // TODO: Hook to object list and count from UI
-            for (int i = 0; i < 1; i++) 
+            ISceneObjectEstimatable[] objects = new ISceneObjectEstimatable[count];
+            for (int i = 0; i < count; i++) 
             { 
                 switch (shapeSelector.SelectedItem) {
                     case "Sphere":
-                        objects[i] = new Sphere(new Vector(double.Parse(objPosX.Text), double.Parse(objPosY.Text), double.Parse(objPosZ.Text)), Defaults.radius, objColorScene);
+                        objects[i] = new Sphere(new Vector(double.Parse(objPosX.Text), double.Parse(objPosY.Text), double.Parse(objPosZ.Text)), radius, objColorScene);
                         break;
                     // TODO: Default behavior?
                     default:
@@ -141,15 +144,18 @@ namespace BoxRayTracer
 
             // TODO: Handle invalid text entry
             Vector camPos = new Vector(double.Parse(camPosX.Text), double.Parse(camPosY.Text), double.Parse(camPosZ.Text));
+            
+            // TODO: Refactor to "Look At" entry rather than camFrus. 
             Vector camFrus = new Vector(double.Parse(camFrusX.Text), double.Parse(camFrusY.Text), double.Parse(camFrusZ.Text));
 
             // Get Color selections from the UI color picker, convert to Scene.Color objects
             
             System.Windows.Media.Color backColorMedia = (System.Windows.Media.Color)(backColorSelector.SelectedItem as System.Reflection.PropertyInfo).GetValue(null, null);
             Scene.Color backColorScene = new Scene.Color((double)backColorMedia.R / 255, (double)backColorMedia.G / 255, (double)backColorMedia.B / 255);
-            
+
             // TODO: Pass lights from UI / state to brt
-            BitmapRaytracer brt = new (objects, Defaults.maxDist, (int)imageContainer.Width, (int)imageContainer.Height, double.Parse(fovBox.Text), camPos, camPos + camFrus, backColorScene, Defaults.sceneLights);
+            SceneStage sceneStage = new SceneStage(objects, Defaults.sceneLights, backColorScene);
+            BitmapRaytracer brt = new (sceneStage, Defaults.maxDist, (int)imageContainer.Width, (int)imageContainer.Height, double.Parse(fovBox.Text), camPos, camPos + camFrus);
             return brt;
         }
 
