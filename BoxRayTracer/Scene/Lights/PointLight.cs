@@ -1,11 +1,7 @@
 ﻿namespace Scene
 {
-    public class PointLight : ISceneLight
+    public class PointLight : SceneLight
     {
-        public Color color { get; private set; }
-        public double iAmbient { get; private set; }
-        public double iDiffuse { get; private set; }
-        public double iSpecular { get; private set; }
         private Vector position { get; set; }
 
         public PointLight(Color color, double iDiffuse, double iSpecular, Vector position)
@@ -13,7 +9,7 @@
             this.color = color;
             this.iDiffuse = iDiffuse;
             this.iSpecular = iSpecular;
-            iAmbient = 0;
+            this.iAmbient = 0;
 
             this.position = position;
         }
@@ -27,9 +23,9 @@
             this.position = position;
         }
 
-        public Vector VToLight(Vector objPos)
+        protected override Vector GetVToLight(Vector objPos)
         {
-            return (position - objPos).Unit();
+            return (position - objPos);
         }
     }
 }

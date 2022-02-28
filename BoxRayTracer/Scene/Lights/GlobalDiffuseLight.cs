@@ -1,19 +1,15 @@
 ﻿namespace Scene
 {
-    public class GlobalDiffuseLight : ISceneLight
+    public class GlobalDiffuseLight : SceneLight
     {
-        public Color color { get; private set; }
-        public double iAmbient { get; private set; }
-        public double iDiffuse { get; private set; }    
-        public double iSpecular { get; private set; }
         private Vector direction { get; set; }
 
         public GlobalDiffuseLight(Color color, double iDiffuse, Vector direction)
         {
             this.color = color;
-            iAmbient = 0;
+            this.iAmbient = 0;
             this.iDiffuse = iDiffuse;
-            iSpecular = 0;
+            this.iSpecular = 0;
 
             this.direction = direction.Unit();
         }
@@ -27,7 +23,7 @@
             this.direction = direction.Unit();
         }
 
-        public Vector VToLight(Vector objPos)
+        protected override Vector GetVToLight(Vector objPos)
         {
             return -direction;
         }
