@@ -124,7 +124,7 @@ namespace BoxRayTracer
             System.Windows.Media.Color objColorMedia = (System.Windows.Media.Color)(objColorSelector.SelectedItem as System.Reflection.PropertyInfo).GetValue(null, null);
             Scene.Color objColorScene = new Scene.Color((double)objColorMedia.R / 255, (double)objColorMedia.G / 255, (double)objColorMedia.B / 255);
 #if DefaultObjects 
-            ISceneObjectEstimatable[] objects = Defaults.sceneObjects;
+            SceneObjectEstimatable[] objects = Defaults.sceneObjects;
 #else
 
             // TODO: Hook to object list and count from UI
@@ -133,7 +133,7 @@ namespace BoxRayTracer
             { 
                 switch (shapeSelector.SelectedItem) {
                     case "Sphere":
-                        objects[i] = new Sphere(new Vector(double.Parse(objPosX.Text), double.Parse(objPosY.Text), double.Parse(objPosZ.Text)), radius, objColorScene);
+                        objects[i] = new Sphere(new Vector(double.Parse(objPosX.Text), double.Parse(objPosY.Text), double.Parse(objPosZ.Text)), objColorScene, radius);
                         break;
                     // TODO: Default behavior?
                     default:

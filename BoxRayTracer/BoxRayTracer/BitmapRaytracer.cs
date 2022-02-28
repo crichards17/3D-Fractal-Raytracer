@@ -80,7 +80,7 @@ namespace BoxRayTracer
         private Scene.Color ColorForPixel(uint x, uint y)
         {
             camera.RayForPixel(x, y, out Vector pos, out Vector rayDir);
-            RayMarch(pos, rayDir, out ISceneObjectEstimatable collisionObj, out Vector? fragPos);
+            RayMarch(pos, rayDir, out SceneObjectEstimatable collisionObj, out Vector? fragPos);
             if (collisionObj != null && fragPos != null)
             {
                 // Do the B.P. thing
@@ -109,13 +109,13 @@ namespace BoxRayTracer
 
         /// <summary>
         /// Returns the additive ambient, diffuse, and specular lighting contributions
-        ///     of the given ISceneLight on the given object fragment.
+        ///     of the given SceneLight on the given object fragment.
         /// </summary>
         /// <param name="sceneLight">Light source being evaluated</param>
         /// <param name="fragPos">Scene-space position of the object fragment</param>
         /// <param name="obj">Object being evaluated</param>
         /// <returns></returns>
-        private Scene.Color BPContribution(ISceneLight sceneLight, Vector fragPos, ISceneObjectEstimatable obj)
+        private Scene.Color BPContribution(SceneLight sceneLight, Vector fragPos, SceneObjectEstimatable obj)
         {
             Scene.Color compoundColor = new Scene.Color(0, 0, 0);
 
@@ -152,11 +152,11 @@ namespace BoxRayTracer
             return compoundColor;
         }
 
-        private void GetNearestObject(Vector pos, out ISceneObjectEstimatable nearestObj, out double minDist)
+        private void GetNearestObject(Vector pos, out SceneObjectEstimatable nearestObj, out double minDist)
         {
             minDist = int.MaxValue;
             nearestObj = sceneStage.sceneObjects[0];
-            foreach (ISceneObjectEstimatable checkObj in sceneStage.sceneObjects)
+            foreach (SceneObjectEstimatable checkObj in sceneStage.sceneObjects)
             {
                 double objDist = checkObj.DE(pos);
                 if (objDist < minDist)
@@ -167,9 +167,9 @@ namespace BoxRayTracer
             }
         }
 
-        private void RayMarch(Vector pos, Vector rayDir, out ISceneObjectEstimatable collisionObj, out Vector? fragPos)
+        private void RayMarch(Vector pos, Vector rayDir, out SceneObjectEstimatable collisionObj, out Vector? fragPos)
         {
-            GetNearestObject(pos, out ISceneObjectEstimatable nearestObj, out double currentDist);
+            GetNearestObject(pos, out SceneObjectEstimatable nearestObj, out double currentDist);
             while (currentDist <= maxDist)
             {
                 if (Utilities.IsEqualApprox(currentDist, 0))
