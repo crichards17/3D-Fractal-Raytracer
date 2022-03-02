@@ -15,9 +15,9 @@ namespace Scene
         }
 
 
-        public override double DE(Vector p)
+        public override double DE(Vector rayOrigin)
         {
-            return Math.Max(0, (p - position).Length() - radius);
+            return Math.Max(0, (rayOrigin - position).Length() - radius);
         }
 
         protected override Vector GetNormal (Vector surfacePos)
