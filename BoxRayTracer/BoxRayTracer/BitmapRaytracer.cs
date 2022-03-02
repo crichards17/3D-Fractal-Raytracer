@@ -129,7 +129,7 @@ namespace BoxRayTracer
             Vector vToLight = sceneLight.VToLight(fragPos);
             Vector normal = obj.Normal(fragPos);
 
-            if (!vToLight.Equals(Vector.origin))
+            if (!vToLight.Equals(Vector.origin) && !vToLight.IsOrtho(normal))
             {
                 // Ray march along vToLight
                 RayMarch(fragPos + normal * Utilities.eps, vToLight, int.MaxValue, out SceneObjectEstimatable collisionObj, out Vector? _);
