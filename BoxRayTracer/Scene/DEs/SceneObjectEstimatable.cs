@@ -16,9 +16,9 @@ namespace Scene
         /// <summary>
         /// Estimates the minimum distance to the object
         /// </summary>
-        /// <param name="position">The point from which to estimate distance to the object</param>
+        /// <param name="rayOrigin">The point from which to estimate distance to the object</param>
         /// <returns>Minimum distance, as double</returns>
-        public abstract double DE(Vector position);
+        public abstract double DE(Vector rayOrigin);
         
         /// <summary>
         /// The Normal vector at the given fragment position
@@ -30,6 +30,6 @@ namespace Scene
             return GetNormal(surfacePos).Unit();
         }
 
-        protected abstract Vector GetNormal(Vector sufracePos);
+        protected abstract Vector GetNormal(Vector surfacePos);
     }
 }

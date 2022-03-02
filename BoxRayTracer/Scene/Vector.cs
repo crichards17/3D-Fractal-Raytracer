@@ -9,7 +9,9 @@ namespace Scene
         public readonly double z;
 
         public static readonly Vector origin = new Vector(0, 0, 0);
+        public static readonly Vector unitX = new Vector(1, 0, 0);
         public static readonly Vector unitY = new Vector(0, 1, 0);
+        public static readonly Vector unitZ = new Vector(0, 0, 1);
 
         public Vector( double x, double y, double z )
         {
@@ -100,6 +102,15 @@ namespace Scene
         {
             double len = this.Length();
             return new Vector(this.x / len, this.y / len, this.z / len);
+        }
+
+        /// <summary>
+        /// Returns a Vector whose components are the absolute values of this Vector's components
+        /// </summary>
+        /// <returns></returns>
+        public Vector Abs()
+        {
+            return new Vector(Math.Abs(this.x), Math.Abs(this.y), Math.Abs(this.z));
         }
 
         /// <summary>
