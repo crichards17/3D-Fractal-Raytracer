@@ -2,11 +2,11 @@
 {
     public class SceneStage
     {
-        public ISceneObjectEstimatable[] sceneObjects { get; private set; }
-        public ISceneLight[] sceneLights { get; private set; }
+        public SceneObjectEstimatable[] sceneObjects { get; private set; }
+        public SceneLight[] sceneLights { get; private set; }
         public Scene.Color backColor { get; set; }
 
-        public SceneStage(ISceneObjectEstimatable[] sceneObjects, ISceneLight[] sceneLights, Color backColor)
+        public SceneStage(SceneObjectEstimatable[] sceneObjects, SceneLight[] sceneLights, Color backColor)
         {
             this.sceneObjects = sceneObjects;
             this.sceneLights = sceneLights;
@@ -16,7 +16,7 @@
         /// Adds newObj to the sceneObjects array.
         /// </summary>
         /// <param name="newObj">The scene object to be added</param>
-        public void AddObject(ISceneObjectEstimatable newObj)
+        public void AddObject(SceneObjectEstimatable newObj)
         {
             sceneObjects = AddToExactArray(sceneObjects, newObj);
             // Maintains an exact-length array for memory access performance.
@@ -38,7 +38,7 @@
         /// Adds newLight to the sceneLights array.
         /// </summary>
         /// <param name="newObj">The scene Light to be added</param>
-        public void AddLight(ISceneLight newLight)
+        public void AddLight(SceneLight newLight)
         {
             sceneLights = AddToExactArray(sceneLights, newLight);
             // Maintains an exact-length array for memory access performance.

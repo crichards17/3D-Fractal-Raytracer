@@ -1,13 +1,8 @@
 ﻿
 namespace Scene
 {
-    public class SpotLight : ISceneLight
+    public class SpotLight : SceneLight
     {
-        public Color color { get; private set; }
-        public double iAmbient { get; private set; }
-        public double iDiffuse { get; private set; }
-        public double iSpecular { get; private set; }
-        
         private Vector position;
         private Vector facingVector { get; set; }
         private double boundingAngle { get; set; }
@@ -38,7 +33,7 @@ namespace Scene
             this.boundingAngle = boundingAngle;
         }
 
-        public Vector VToLight(Vector objPos)
+        protected override Vector GetVToLight(Vector objPos)
         {
             Vector vToLight = (objPos - position).Unit();
             if(Utilities.RadiansToDegrees(vToLight.GetTheta(facingVector)) <= boundingAngle)

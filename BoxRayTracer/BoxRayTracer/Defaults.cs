@@ -46,12 +46,12 @@ namespace BoxRayTracer
         private static readonly PointLight pointLight1 = new PointLight(new Color(0.2, 1.0, 1.0), 0.5, 0.5, new Vector(10, 10, 10));
         // Light blue point light at (5, 5, 5)
 
-        public static readonly ISceneLight[] sceneLights = new ISceneLight[] {globalAmbient1, globalDiffuseLight1, pointLight1};
+        public static readonly SceneLight[] sceneLights = new SceneLight[] {globalAmbient1, globalDiffuseLight1, pointLight1};
 
 
         // Object defaults
-        public static readonly Sphere sphere1 = new Sphere(Vector.origin, 1.0, new Color(1.0, 1.0, 1.0));
-        public static readonly Sphere sphere2 = new Sphere(new Vector(-3, 1, 0), 1.0, new Color(1.0, 1.0, 1.0));
-        public static readonly ISceneObjectEstimatable[] sceneObjects = new ISceneObjectEstimatable[] { sphere1, sphere2 };
+        public static readonly Sphere sphere1 = new Sphere(Vector.origin, new Color(1.0, 1.0, 1.0), 1.0);
+        public static readonly Sphere sphere2 = new Sphere(new Vector(3, 0, -2), new Color(1.0, 1.0, 1.0), 1.0);
+        public static readonly SceneObjectEstimatable[] sceneObjects = new SceneObjectEstimatable[] { sphere1, sphere2 };
     }
 }

@@ -2,29 +2,27 @@
 
 namespace Scene
 {
-    public class Sphere : ISceneObjectEstimatable
+    public class Sphere : SceneObjectEstimatable
     {
-        public Vector position { get; private set; }
 
         private readonly double radius;
-        public Color color { get; private set; }
 
-        public Sphere(Vector position, double radius, Color color)
+        public Sphere(Vector position, Color color, double radius)
         {
             this.position = position;
-            this.radius = radius;
             this.color = color;
+            this.radius = radius;
         }
 
 
-        public double DE(Vector p)
+        public override double DE(Vector p)
         {
             return Math.Max(0, (p - position).Length() - radius);
         }
 
-        public Vector Normal(Vector surfacePos)
+        protected override Vector GetNormal (Vector surfacePos)
         {
-            return (surfacePos - position).Unit();
+            return (surfacePos - position);
         }
     }
 }
