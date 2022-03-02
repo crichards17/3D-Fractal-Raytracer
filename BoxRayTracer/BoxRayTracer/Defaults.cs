@@ -6,9 +6,9 @@ namespace BoxRayTracer
     internal class Defaults
     {
         // Object defaults
-        public const double camPosX = 0;
+        public const double camPosX = -2;
         public const double camPosY = 0;
-        public const double camPosZ = 3;
+        public const double camPosZ = 4;
 
         // Camera defaults
         public const double objPosX = 0;
@@ -51,7 +51,7 @@ namespace BoxRayTracer
 
         // Object defaults
         public static readonly Sphere sphere1 = new Sphere(Vector.origin, 1.0, new Color(1.0, 1.0, 1.0));
-        public static readonly Sphere sphere2 = new Sphere(new Vector(3, 0, -2), 1.0, new Color(1.0, 1.0, 1.0));
+        public static readonly Sphere sphere2 = new Sphere(new Vector(-3, 1, 0), 1.0, new Color(1.0, 1.0, 1.0));
         public static readonly ISceneObjectEstimatable[] sceneObjects = new ISceneObjectEstimatable[] { sphere1, sphere2 };
     }
 }
