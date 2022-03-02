@@ -124,10 +124,13 @@ namespace BoxRayTracer
 
             // Only apply Diffuse and Specular if the vector to the light source is non-zero
             //  (Enables SpotLight lighting region check, and avoids undefined light behavior)
+            //  and if the vToLight is not parallel to the fragment
+            //  (prevents unnecessary max-march iterations on flat surfaces)
             Vector vToLight = sceneLight.VToLight(fragPos);
+            Vector normal = obj.Normal(fragPos);
+
             if (!vToLight.Equals(Vector.origin))
             {
-                Vector normal = obj.Normal(fragPos);
                 // Ray march along vToLight
                 RayMarch(fragPos + normal * Utilities.eps, vToLight, int.MaxValue, out SceneObjectEstimatable collisionObj, out Vector? _);
                 if (collisionObj == null)

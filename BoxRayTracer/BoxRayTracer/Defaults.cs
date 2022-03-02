@@ -1,4 +1,5 @@
-﻿#define Box
+﻿//#define Box
+#define Mixed
 //#define AmbientOnly
 
 using Scene;
@@ -58,11 +59,14 @@ namespace BoxRayTracer
         // Object defaults
         public static readonly Sphere sphere1 = new Sphere(Vector.origin, new Color(1.0, 1.0, 1.0), 1.0);
         public static readonly Sphere sphere2 = new Sphere(new Vector(3, 0, -2), new Color(1.0, 1.0, 1.0), 1.0);
+        public static readonly Sphere sphere3 = new Sphere(new Vector(-1, 1, 1), new Color(1.0, 1.0, 1.0), 0.25);
 
         public static readonly Box box1 = new Box(Vector.origin, new Vector(0.5, 0.5, 0.5), new Color(1.0, 1.0, 1.0));
 
 #if Box
         public static readonly SceneObjectEstimatable[] sceneObjects = new SceneObjectEstimatable[] { box1 };
+#elif Mixed
+        public static readonly SceneObjectEstimatable[] sceneObjects = new SceneObjectEstimatable[] { box1, sphere3 };
 #else
         // Use spheres:
         public static readonly SceneObjectEstimatable[] sceneObjects = new SceneObjectEstimatable[] { sphere1, sphere2 };
