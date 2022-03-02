@@ -127,25 +127,24 @@ namespace BoxRayTracer
             Vector vToLight = sceneLight.VToLight(fragPos);
             if (!vToLight.Equals(Vector.origin))
             {
-                // Check if shadowed from light
-                // From current fragment position
-                
-                // Ray march along vToLight
-                // If collision (within eps), shadow
-
                 Vector normal = obj.Normal(fragPos);
-                
-                // Diffuse light component:
-                if (sceneLight.iDiffuse != 0)
+                // Ray march along vToLight
+                RayMarch(fragPos + normal * Utilities.eps, vToLight, out SceneObjectEstimatable collisionObj, out Vector? _);
+                if (collisionObj == null)
                 {
-                compoundColor += sceneLight.color * sceneLight.iDiffuse * Math.Max(normal.Dot(vToLight), 0) * obj.color;
-                }
 
-                // Specular light component:
-                if (sceneLight.iSpecular != 0)
-                {
-                Vector halfV = (vToLight + (camera.camPos - fragPos).Unit()).Unit();
-                compoundColor += sceneLight.color * sceneLight.iSpecular * Math.Pow(Math.Max(normal.Dot(halfV), 0.0), 32) * obj.color;
+                    // Diffuse light component:
+                    if (sceneLight.iDiffuse != 0)
+                    {
+                        compoundColor += sceneLight.color * sceneLight.iDiffuse * Math.Max(normal.Dot(vToLight), 0) * obj.color;
+                    }
+
+                    // Specular light component:
+                    if (sceneLight.iSpecular != 0)
+                    {
+                        Vector halfV = (vToLight + (camera.camPos - fragPos).Unit()).Unit();
+                        compoundColor += sceneLight.color * sceneLight.iSpecular * Math.Pow(Math.Max(normal.Dot(halfV), 0.0), 32) * obj.color;
+                    }
                 }
             }
             
