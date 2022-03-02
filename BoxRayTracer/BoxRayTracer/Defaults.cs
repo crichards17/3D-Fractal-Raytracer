@@ -9,18 +9,18 @@ namespace BoxRayTracer
     internal class Defaults
     {
         // Camera defaults
-        public const double camPosX = 0;
-        public const double camPosY = 0;
-        public const double camPosZ = 10;
+        public const double camPosX = -2;
+        public const double camPosY = -2;
+        public const double camPosZ = 3;
 
         // Object defaults
         public const double objPosX = 0;
         public const double objPosY = 0;
         public const double objPosZ = 0;
 
-        public const double camFrusX = 0;
-        public const double camFrusY = 0;
-        public const double camFrusZ = -1;
+        public const double camFrusX = 1;
+        public const double camFrusY = 1;
+        public const double camFrusZ = -2;
 
         public const double fov = 90;
 
@@ -43,7 +43,7 @@ namespace BoxRayTracer
         private static readonly AmbientLight globalAmbient1 = new AmbientLight(new Color(1.0,1.0,1.0), 0.1);
         // Global soft white ambient
 
-        private static readonly GlobalDiffuseLight globalDiffuseLight1 = new GlobalDiffuseLight(new Color(1.0, 0.2, 1.0), 0.5, new Vector(1, -1, 0));
+        private static readonly GlobalDiffuseLight globalDiffuseLight1 = new GlobalDiffuseLight(new Color(1.0, 0.2, 1.0), 0.5, new Vector(1, -1, -1));
         // Pink diffuse facing (1,0,0)
 
         private static readonly PointLight pointLight1 = new PointLight(new Color(0.2, 1.0, 1.0), 0.5, 0.5, new Vector(10, 10, 10));

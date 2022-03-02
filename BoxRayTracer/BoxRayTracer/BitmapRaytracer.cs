@@ -1,4 +1,4 @@
-﻿// #define Singlethread
+﻿//#define Singlethread
 using Scene;
 using System;
 using System.Drawing;
@@ -80,7 +80,7 @@ namespace BoxRayTracer
         private Scene.Color ColorForPixel(uint x, uint y)
         {
             camera.RayForPixel(x, y, out Vector pos, out Vector rayDir);
-            RayMarch(pos, rayDir, out SceneObjectEstimatable collisionObj, out Vector? fragPos);
+            RayMarch(pos, rayDir, 100, out SceneObjectEstimatable collisionObj, out Vector? fragPos);
             if (collisionObj != null && fragPos != null)
             {
                 // Do the B.P. thing
@@ -129,7 +129,7 @@ namespace BoxRayTracer
             {
                 Vector normal = obj.Normal(fragPos);
                 // Ray march along vToLight
-                RayMarch(fragPos + normal * Utilities.eps, vToLight, out SceneObjectEstimatable collisionObj, out Vector? _);
+                RayMarch(fragPos + normal * Utilities.eps, vToLight, int.MaxValue, out SceneObjectEstimatable collisionObj, out Vector? _);
                 if (collisionObj == null)
                 {
 
@@ -166,10 +166,13 @@ namespace BoxRayTracer
             }
         }
 
-        private void RayMarch(Vector pos, Vector rayDir, out SceneObjectEstimatable collisionObj, out Vector? fragPos)
+        private void RayMarch(Vector pos, Vector rayDir, int maxMarch, out SceneObjectEstimatable collisionObj, out Vector? fragPos)
         {
             GetNearestObject(pos, out SceneObjectEstimatable nearestObj, out double currentDist);
-            while (currentDist <= maxDist)
+            // Possible infinite looping?
+            int marchCount = 0;
+            
+            while (currentDist <= maxDist && marchCount < maxMarch)
             {
                 if (Utilities.IsEqualApprox(currentDist, 0))
                 {
@@ -179,6 +182,9 @@ namespace BoxRayTracer
                 }
                 pos += rayDir * currentDist;
                 GetNearestObject(pos, out nearestObj, out currentDist);
+
+                //
+                marchCount++;
             }
             collisionObj = null;
             fragPos = null;
