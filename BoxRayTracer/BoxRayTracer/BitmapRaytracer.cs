@@ -129,7 +129,7 @@ namespace BoxRayTracer
             {
                 Vector normal = obj.Normal(fragPos);
                 // Ray march along vToLight
-                RayMarch(fragPos + normal * Utilities.eps, vToLight, out ISceneObjectEstimatable collisionObj, out Vector? _);
+                RayMarch(fragPos + normal * Utilities.eps, vToLight, out SceneObjectEstimatable collisionObj, out Vector? _);
                 if (collisionObj == null)
                 {
 
