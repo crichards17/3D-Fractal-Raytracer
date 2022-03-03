@@ -51,3 +51,12 @@ Initial implementation of the lighting model. Light interface and corresponding 
 ### Multiple Objects in the scene
 
 <img src="https://github.com/crichards17/BoxRayTracer/blob/main/Progression/Captures/02-19_Multiple_Objects.PNG?raw=true" height="300" name="Multiple_Objects" style="display:block;">
+
+### Shadow Rays
+
+<img src="https://github.com/crichards17/BoxRayTracer/blob/main/Progression/Captures/02-26_First_Shadows.PNG?raw=true" height="300" name="Multiple_Objects" style="display:block;">
+
+### Box DE and Mixed Objects
+
+<img src="https://github.com/crichards17/BoxRayTracer/blob/main/Progression/Captures/03-02_Mixed_Objects.PNG?raw=true" height="300" name="Multiple_Objects" style="display:block;">
+
