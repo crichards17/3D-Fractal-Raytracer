@@ -170,5 +170,17 @@ namespace Scene
         public static Vector operator *(Vector v, double s) => new Vector(v.x * s, v.y * s, v.z * s);
         public static Vector operator *(double s, Vector v) => v * s;
         #endregion
+
+        #region debug
+        public override string ToString()
+        {
+            return($"< {this.x}, {this.y}, {this.z} >");
+        }
+
+        public bool IsNaN()
+        {
+           return (Double.IsNaN(this.x) || Double.IsNaN(this.y) || Double.IsNaN(this.z)) ;
+        }
+        #endregion
     }
 }

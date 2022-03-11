@@ -1,5 +1,4 @@
-﻿//#define debug
-using System;
+﻿using System;
 
 namespace Scene
 {
@@ -33,7 +32,7 @@ namespace Scene
         public override double DE(Vector rayOrigin)
         {
             // Base case: box is at the origin
-            Vector p = rayOrigin.Abs();
+            Vector p = (rayOrigin - position).Abs() + position;
             double d = Math.Sqrt(Math.Pow(Math.Max(p.x - cornerPos.x, 0), 2) + Math.Pow(Math.Max(p.y - cornerPos.y, 0), 2) + Math.Pow(Math.Max(p.z - cornerPos.z, 0), 2));
             return d;
 
@@ -43,19 +42,31 @@ namespace Scene
         protected override Vector GetNormal(Vector surfacePos)
         {
             // Transform surfacePos to the Quad1 corner equivalent
-            Vector absFrag = surfacePos.Abs();
+            Vector absFrag = (surfacePos - position).Abs() + position;
 
-            // For each component (e.g. x):
+            // For each component (x, y, z):
             //  If Corner.x - absFrag.x is 0, return the unit representation of that component.
             //  If Corner.x - absFrag.x is nonzero, return 0.
-            Vector n = new Vector(Math.Floor(1.0 + Utilities.eps - cornerPos.x + absFrag.x) * Math.Sign(surfacePos.x), Math.Floor(1.0 + Utilities.eps - cornerPos.y + absFrag.y) * Math.Sign(surfacePos.y), Math.Floor(1.0 + Utilities.eps - cornerPos.z + absFrag.z) * Math.Sign(surfacePos.z));
-#if debug   
-            if (!Utilities.IsEqualApprox(n.Length(), 1.0))
+
+            //Vector n = new Vector(Math.Floor(1.0 + Utilities.eps - (cornerPos.x - absFrag.x) / cornerPos.x) * Math.Sign(surfacePos.x), Math.Floor(1.0 + Utilities.eps - (cornerPos.y - absFrag.y) / cornerPos.y) * Math.Sign(surfacePos.y), Math.Floor(1.0 + Utilities.eps - (cornerPos.z - absFrag.z) / cornerPos.z) * Math.Sign(surfacePos.z));
+            //return n;
+
+            if (Utilities.IsEqualApprox(cornerPos.x, absFrag.x))
             {
-                throw new InvalidOperationException();
+                return new Vector(surfacePos.x, 0, 0);
             }
-#endif
-            return n;
+            else if (Utilities.IsEqualApprox(cornerPos.y, absFrag.y)) 
+            { 
+                return new Vector(0, surfacePos.y, 0);
+            }
+            else if (Utilities.IsEqualApprox(cornerPos.z, absFrag.z))
+            {
+                return new Vector(0, 0, surfacePos.z);
+            }
+            else
+            {
+                return Vector.origin;
+            }
         }
     }
 }

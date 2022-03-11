@@ -80,7 +80,7 @@ namespace BoxRayTracer
         private Scene.Color ColorForPixel(uint x, uint y)
         {
             camera.RayForPixel(x, y, out Vector pos, out Vector rayDir);
-            RayMarch(pos, rayDir, 100, out SceneObjectEstimatable collisionObj, out Vector? fragPos);
+            RayMarch(pos, rayDir, Defaults.maxMarch, out SceneObjectEstimatable collisionObj, out Vector? fragPos);
             if (collisionObj != null && fragPos != null)
             {
                 // Do the B.P. thing
@@ -133,6 +133,8 @@ namespace BoxRayTracer
             {
                 // Ray march along vToLight
                 RayMarch(fragPos + normal * Utilities.eps, vToLight, int.MaxValue, out SceneObjectEstimatable collisionObj, out Vector? _);
+                
+                // Apply diffuse and specular if no object is intersected (shadowing)
                 if (collisionObj == null)
                 {
 
@@ -185,8 +187,6 @@ namespace BoxRayTracer
                 }
                 pos += rayDir * currentDist;
                 GetNearestObject(pos, out nearestObj, out currentDist);
-
-                //
                 marchCount++;
             }
             collisionObj = null;
