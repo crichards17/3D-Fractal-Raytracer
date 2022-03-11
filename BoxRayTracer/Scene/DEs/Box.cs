@@ -45,13 +45,12 @@ namespace Scene
             Vector absFrag = (surfacePos - position).Abs() + position;
 
             // For each component (x, y, z):
-            //  If Corner.x - absFrag.x is 0, return the unit representation of that component.
+            //  If Corner.x - absFrag.x is 0, return that component of surfacePos.
             //  If Corner.x - absFrag.x is nonzero, return 0.
 
-            //Vector n = new Vector(Math.Floor(1.0 + Utilities.eps - (cornerPos.x - absFrag.x) / cornerPos.x) * Math.Sign(surfacePos.x), Math.Floor(1.0 + Utilities.eps - (cornerPos.y - absFrag.y) / cornerPos.y) * Math.Sign(surfacePos.y), Math.Floor(1.0 + Utilities.eps - (cornerPos.z - absFrag.z) / cornerPos.z) * Math.Sign(surfacePos.z));
-            //return n;
-
-            if (Utilities.IsEqualApprox(cornerPos.x, absFrag.x))
+            // This works...
+            #region conditionals solution
+            /*if (Utilities.IsEqualApprox(cornerPos.x, absFrag.x))
             {
                 return new Vector(surfacePos.x, 0, 0);
             }
@@ -67,6 +66,11 @@ namespace Scene
             {
                 return Vector.origin;
             }
+            */
+            #endregion
+
+            // ...but this sparks joy
+            return new Vector(surfacePos.x * (int)(1.0 + 2 * Utilities.eps - (cornerPos.x - absFrag.x) / (cornerPos.x - position.x)), surfacePos.y * (int)(1.0 + 2 * Utilities.eps - (cornerPos.y - absFrag.y) / (cornerPos.y - position.y)), surfacePos.z * (int)(1.0 + 2 * Utilities.eps - (cornerPos.z - absFrag.z) / (cornerPos.z - position.z)));
         }
     }
 }
