@@ -120,7 +120,7 @@ namespace BoxRayTracer
             Scene.Color compoundColor = new Scene.Color(0, 0, 0);
 
             // Ambient light component:
-            compoundColor += sceneLight.color * sceneLight.iAmbient * obj.color;
+            compoundColor += sceneLight.color * sceneLight.iAmbient * obj.material.ambientColor;
 
             // Only apply Diffuse and Specular if the vector to the light source is non-zero
             //  (Enables SpotLight lighting region check, and avoids undefined light behavior)
@@ -141,14 +141,14 @@ namespace BoxRayTracer
                     // Diffuse light component:
                     if (sceneLight.iDiffuse != 0)
                     {
-                        compoundColor += sceneLight.color * sceneLight.iDiffuse * Math.Max(normal.Dot(vToLight), 0) * obj.color;
+                        compoundColor += sceneLight.color * sceneLight.iDiffuse * Math.Max(normal.Dot(vToLight), 0) * obj.material.diffuseColor;
                     }
 
                     // Specular light component:
                     if (sceneLight.iSpecular != 0)
                     {
                         Vector halfV = (vToLight + (camera.camPos - fragPos).Unit()).Unit();
-                        compoundColor += sceneLight.color * sceneLight.iSpecular * Math.Pow(Math.Max(normal.Dot(halfV), 0.0), 32) * obj.color;
+                        compoundColor += sceneLight.color * sceneLight.iSpecular * Math.Pow(Math.Max(normal.Dot(halfV), 0.0), obj.material.reflectivity) * obj.material.specularColor;
                     }
                 }
             }

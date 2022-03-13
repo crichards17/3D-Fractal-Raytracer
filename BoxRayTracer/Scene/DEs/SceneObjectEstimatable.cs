@@ -9,9 +9,9 @@ namespace Scene
         public Vector position { get; protected set; }
         
         /// <summary>
-        /// The object's material Color
+        /// The object's material
         /// </summary>
-        public Color color { get; protected set; }
+        public Material material { get; protected set; }
         
         /// <summary>
         /// Estimates the minimum distance to the object

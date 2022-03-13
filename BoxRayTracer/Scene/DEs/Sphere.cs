@@ -7,10 +7,10 @@ namespace Scene
 
         private readonly double radius;
 
-        public Sphere(Vector position, Color color, double radius)
+        public Sphere(Vector position, Material material, double radius)
         {
             this.position = position;
-            this.color = color;
+            this.material = material;
             this.radius = radius;
         }
 
