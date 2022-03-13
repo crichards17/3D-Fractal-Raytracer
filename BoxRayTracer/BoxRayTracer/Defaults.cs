@@ -60,13 +60,13 @@ namespace BoxRayTracer
 #endif
 
         // Object defaults
-        public static readonly Sphere sphere1 = new Sphere(Vector.origin, new Color(1.0, 1.0, 1.0), 1.0);
-        public static readonly Sphere sphere2 = new Sphere(new Vector(3, 0, -2), new Color(1.0, 1.0, 1.0), 1.0);
-        public static readonly Sphere sphere3 = new Sphere(new Vector(0, 1.25, 0), new Color(1.0, 1.0, 1.0), 0.5);
+        public static readonly Sphere sphere1 = new Sphere(Vector.origin, new Material(new Color(1.0, 1.0, 1.0)), 1.0);
+        public static readonly Sphere sphere2 = new Sphere(new Vector(3, 0, -2), new Material(new Color(1.0, 1.0, 1.0)), 1.0);
+        public static readonly Sphere sphere3 = new Sphere(new Vector(0, 1.25, 0), new Material(new Color(1.0, 1.0, 1.0)), 0.5);
 
-        public static readonly Box box1 = new Box(new Vector(0, 0.5, 0), new Vector(2, 0.75, 2), new Color(1.0, 1.0, 1.0));
+        public static readonly Box box1 = new Box(new Vector(0, 0.5, 0), new Vector(2, 0.25, 2), new Material(new Color(1.0, 1.0, 1.0)));
 
-        public static readonly Box box2 = new Box(new Vector(0, -0.5, 0), new Vector(3, 1, 3), new Color(1.0, 1.0, 1.0));
+        public static readonly Box box2 = new Box(new Vector(0, -0.5, 0), new Vector(3, 1, 3), new Material(new Color(1.0, 1.0, 1.0)));
 
 #if Boxes
         public static readonly SceneObjectEstimatable[] sceneObjects = new SceneObjectEstimatable[] { box1 };

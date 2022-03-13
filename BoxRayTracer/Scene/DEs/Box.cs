@@ -4,26 +4,25 @@ namespace Scene
 {
     public class Box : SceneObjectEstimatable
     {
-        private Vector cornerPos;
+        private Vector widthHeightDepth;
         private Vector facingV;
         private Vector topV;
 
         #region constructors
-        public Box(Vector center, Vector corner, Color color)
+        public Box(Vector center, Vector widthHeightDepth, Material material)
         {
             this.position = center;
-            this.cornerPos = (corner - center).Abs() + center;
-            this.color = color;
+            this.widthHeightDepth = widthHeightDepth;
+            this.material = material;
             this.facingV = Vector.unitZ;
             this.topV = Vector.unitY;
         }
 
-        public Box(Vector center, Vector corner, Color color, Vector facingV, Vector topV)
+        public Box(Vector center, Vector widthHeightDepth, Material material, Vector facingV, Vector topV)
         {
             this.position = center;
-            // TODO: incorrect cornerPosition assignment
-            this.cornerPos = corner.Abs();
-            this.color = color;
+            this.widthHeightDepth = widthHeightDepth;
+            this.material = material;
             this.facingV = facingV.Unit();
             this.topV = topV.Unit();
         }
@@ -31,22 +30,21 @@ namespace Scene
 
         public override double DE(Vector rayOrigin)
         {
-            // Base case: box is at the origin
-            Vector p = (rayOrigin - position).Abs() + position;
-            double d = Math.Sqrt(Math.Pow(Math.Max(p.x - cornerPos.x, 0), 2) + Math.Pow(Math.Max(p.y - cornerPos.y, 0), 2) + Math.Pow(Math.Max(p.z - cornerPos.z, 0), 2));
+            Vector p = (rayOrigin - position).Abs();
+            double d = Math.Sqrt(Math.Pow(Math.Max(p.x - widthHeightDepth.x, 0), 2) + Math.Pow(Math.Max(p.y - widthHeightDepth.y, 0), 2) + Math.Pow(Math.Max(p.z - widthHeightDepth.z, 0), 2));
             return d;
 
-            // Have not yet accounted for translated / rotated cube.
+            // Have not yet accounted for rotations.
         }
 
         protected override Vector GetNormal(Vector surfacePos)
         {
             // Transform surfacePos to the Quad1 corner equivalent
-            Vector absFrag = (surfacePos - position).Abs() + position;
+            Vector absFrag = (surfacePos - position).Abs();
 
             // For each component (x, y, z):
-            //  If Corner.x - absFrag.x is 0, return that component of surfacePos.
-            //  If Corner.x - absFrag.x is nonzero, return 0.
+            //  If width - absFrag.x is 0, return that component of surfacePos.
+            //  If width - absFrag.x is nonzero, return 0.
 
             // This works...
             #region conditionals solution
@@ -70,7 +68,7 @@ namespace Scene
             #endregion
 
             // ...but this sparks joy
-            return new Vector(surfacePos.x * (int)(1.0 + 2 * Utilities.eps - (cornerPos.x - absFrag.x) / (cornerPos.x - position.x)), surfacePos.y * (int)(1.0 + 2 * Utilities.eps - (cornerPos.y - absFrag.y) / (cornerPos.y - position.y)), surfacePos.z * (int)(1.0 + 2 * Utilities.eps - (cornerPos.z - absFrag.z) / (cornerPos.z - position.z)));
+            return new Vector(surfacePos.x * (int)(1.0 + 2 * Utilities.eps - (widthHeightDepth.x - absFrag.x) / widthHeightDepth.x), surfacePos.y * (int)(1.0 + 2 * Utilities.eps - (widthHeightDepth.y - absFrag.y) / widthHeightDepth.y), surfacePos.z * (int)(1.0 + 2 * Utilities.eps - (widthHeightDepth.z - absFrag.z) / widthHeightDepth.z));
         }
     }
 }
