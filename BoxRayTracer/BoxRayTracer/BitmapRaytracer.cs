@@ -85,13 +85,40 @@ namespace BoxRayTracer
             {
                 // Do the B.P. thing
                 Scene.Color outColor = new Scene.Color(0, 0, 0);
+                Vector normal = collisionObj.Normal(fragPos.Value);
                 for (int i = 0; i < sceneStage.sceneLights.Length; i++)
                 {
-                    outColor += BPContribution(sceneStage.sceneLights[i], fragPos.Value, collisionObj);
+                    outColor += BPContribution(sceneStage.sceneLights[i], fragPos.Value, normal, collisionObj.material, camera.camPos);
                 }
+                // Add reflections;
+                outColor += GetReflections(0, collisionObj, fragPos.Value, camera.camPos);
+
                 return outColor;
             }
             return sceneStage.backColor;
+        }
+
+        private Scene.Color GetReflections(int reflectionDepth, SceneObjectEstimatable collisionObj, Vector fragmentPos, Vector fromPos)
+        {
+            Scene.Color reflectionColor = Scene.Color.Black;
+            if (reflectionDepth < Defaults.maxReflections)
+            {
+                Vector normal = collisionObj.Normal(fragmentPos);
+                Vector incident = (fragmentPos - fromPos).Unit();
+                Vector reflectV = (incident - 2 * incident.Dot(normal) * normal);
+                RayMarch(fragmentPos + reflectV * Utilities.eps, reflectV, 100, out SceneObjectEstimatable reflectionObj, out Vector? reflectionObjPos);
+                if (reflectionObj != null && reflectionObjPos != null)
+                {
+                    Scene.Color reflectObjColor = Scene.Color.Black;
+                    for (int i = 0; i < sceneStage.sceneLights.Length; i++)
+                    {
+                        reflectObjColor += BPContribution(sceneStage.sceneLights[i], reflectionObjPos.Value, normal, reflectionObj.material, fragmentPos);
+                    }
+                    reflectObjColor += GetReflections(reflectionDepth + 1, reflectionObj, reflectionObjPos.Value, fragmentPos);
+                    reflectionColor += reflectObjColor * collisionObj.material.reflectivity * collisionObj.material.diffuseColor;
+                }
+            }
+            return reflectionColor;
         }
 
         /// <summary>
@@ -115,19 +142,18 @@ namespace BoxRayTracer
         /// <param name="fragPos">Scene-space position of the object fragment</param>
         /// <param name="obj">Object being evaluated</param>
         /// <returns></returns>
-        private Scene.Color BPContribution(SceneLight sceneLight, Vector fragPos, SceneObjectEstimatable obj)
+        private Scene.Color BPContribution(SceneLight sceneLight, Vector fragPos, Vector normal, Material objMaterial, Vector camPos)
         {
             Scene.Color compoundColor = new Scene.Color(0, 0, 0);
 
             // Ambient light component:
-            compoundColor += sceneLight.color * sceneLight.iAmbient * obj.material.ambientColor;
+            compoundColor += sceneLight.color * sceneLight.iAmbient * objMaterial.ambientColor;
 
             // Only apply Diffuse and Specular if the vector to the light source is non-zero
             //  (Enables SpotLight lighting region check, and avoids undefined light behavior)
             //  and if the vToLight is not parallel to the fragment
             //  (prevents unnecessary max-march iterations on flat surfaces)
             Vector vToLight = sceneLight.VToLight(fragPos);
-            Vector normal = obj.Normal(fragPos);
 
             if (!vToLight.Equals(Vector.origin) && !vToLight.IsOrtho(normal))
             {
@@ -141,14 +167,14 @@ namespace BoxRayTracer
                     // Diffuse light component:
                     if (sceneLight.iDiffuse != 0)
                     {
-                        compoundColor += sceneLight.color * sceneLight.iDiffuse * Math.Max(normal.Dot(vToLight), 0) * obj.material.diffuseColor;
+                        compoundColor += sceneLight.color * sceneLight.iDiffuse * Math.Max(normal.Dot(vToLight), 0) * objMaterial.diffuseColor;
                     }
 
                     // Specular light component:
                     if (sceneLight.iSpecular != 0)
                     {
-                        Vector halfV = (vToLight + (camera.camPos - fragPos).Unit()).Unit();
-                        compoundColor += sceneLight.color * sceneLight.iSpecular * Math.Pow(Math.Max(normal.Dot(halfV), 0.0), obj.material.reflectivity) * obj.material.specularColor;
+                        Vector halfV = (vToLight + (camPos - fragPos).Unit()).Unit();
+                        compoundColor += sceneLight.color * sceneLight.iSpecular * Math.Pow(Math.Max(normal.Dot(halfV), 0.0), objMaterial.reflectivity * 64) * objMaterial.specularColor;
                     }
                 }
             }

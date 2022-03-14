@@ -37,12 +37,13 @@ namespace BoxRayTracer
         // Render defaults
         public const double maxDist = 20;
         public const int maxMarch = 300;
+        public const int maxReflections = 3;
         public const double imgWidth = 1024;
         public const double imgHeight = 1024;
 
 
         // Light defaults
-        private static readonly AmbientLight globalAmbient1 = new AmbientLight(new Color(1.0,1.0,1.0), 0.1);
+        private static readonly AmbientLight globalAmbient1 = new AmbientLight(Color.White, 0.1);
 
         // "Sun"
         private static readonly GlobalDiffuseLight globalDiffuseLight1 = new GlobalDiffuseLight(new Color(0.98, 0.84, 0.01), 0.5, new Vector(1, -2, -1));
@@ -51,7 +52,7 @@ namespace BoxRayTracer
         private static readonly PointLight pointLight1 = new PointLight(new Color(0.01, 0.84, 0.98), 0.5, 0.8, new Vector(-5, 7, -5));
 
         // Red point light
-        private static readonly PointLight pointLight2 = new PointLight(new Color(0.98, 0.01, 0.01), 0.5, 0.7, new Vector(5, 10, -5));
+        private static readonly PointLight pointLight2 = new PointLight(Color.Red, 0.5, 0.7, new Vector(5, 10, -5));
 
 #if AmbientOnly
         public static readonly SceneLight[] sceneLights = new SceneLight[] {globalAmbient1};
@@ -61,17 +62,16 @@ namespace BoxRayTracer
 
         // Object defaults
         public static readonly Sphere sphere1 = new Sphere(Vector.origin, new Material(new Color(1.0, 1.0, 1.0)), 1.0);
-        public static readonly Sphere sphere2 = new Sphere(new Vector(3, 0, -2), new Material(new Color(1.0, 1.0, 1.0)), 1.0);
+        public static readonly Sphere sphere2 = new Sphere(new Vector(1, 1.75, -1), new Material(new Color(1.0, 1.0, 1.0)), 0.75);
         public static readonly Sphere sphere3 = new Sphere(new Vector(0, 1.25, 0), new Material(new Color(1.0, 1.0, 1.0)), 0.5);
 
         public static readonly Box box1 = new Box(new Vector(0, 0.5, 0), new Vector(2, 0.25, 2), new Material(new Color(1.0, 1.0, 1.0)));
-
         public static readonly Box box2 = new Box(new Vector(0, -0.5, 0), new Vector(3, 1, 3), new Material(new Color(1.0, 1.0, 1.0)));
 
 #if Boxes
         public static readonly SceneObjectEstimatable[] sceneObjects = new SceneObjectEstimatable[] { box1 };
 #elif Mixed
-        public static readonly SceneObjectEstimatable[] sceneObjects = new SceneObjectEstimatable[] { box1, sphere3 };
+        public static readonly SceneObjectEstimatable[] sceneObjects = new SceneObjectEstimatable[] { box1, sphere2, sphere3 };
 #else
         // Use spheres:
         public static readonly SceneObjectEstimatable[] sceneObjects = new SceneObjectEstimatable[] { sphere1, sphere2 };
