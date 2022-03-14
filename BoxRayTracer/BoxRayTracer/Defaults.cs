@@ -37,6 +37,7 @@ namespace BoxRayTracer
         // Render defaults
         public const double maxDist = 20;
         public const int maxMarch = 300;
+        public const int maxReflections = 3;
         public const double imgWidth = 1024;
         public const double imgHeight = 1024;
 
