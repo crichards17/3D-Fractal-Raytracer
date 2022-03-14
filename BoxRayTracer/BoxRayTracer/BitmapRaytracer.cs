@@ -101,7 +101,7 @@ namespace BoxRayTracer
                     {
                         reflectColor += BPContribution(sceneStage.sceneLights[i], reflectionObjPos.Value, normal, reflectionObj.material);
                     }
-                    outColor += reflectColor * 0.5 * collisionObj.material.diffuseColor;
+                    outColor += reflectColor * collisionObj.material.reflectivity * collisionObj.material.diffuseColor;
                 }
                 return outColor;
 
@@ -162,7 +162,7 @@ namespace BoxRayTracer
                     if (sceneLight.iSpecular != 0)
                     {
                         Vector halfV = (vToLight + (camera.camPos - fragPos).Unit()).Unit();
-                        compoundColor += sceneLight.color * sceneLight.iSpecular * Math.Pow(Math.Max(normal.Dot(halfV), 0.0), objMaterial.reflectivity) * objMaterial.specularColor;
+                        compoundColor += sceneLight.color * sceneLight.iSpecular * Math.Pow(Math.Max(normal.Dot(halfV), 0.0), objMaterial.reflectivity * 64) * objMaterial.specularColor;
                     }
                 }
             }

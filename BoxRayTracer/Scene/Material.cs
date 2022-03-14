@@ -14,19 +14,19 @@ namespace Scene
             this.ambientColor = ambient;
             this.diffuseColor = diffuse;
             this.specularColor = specular;
-            this.reflectivity = Math.Clamp(reflectivity, 1, 64);
+            this.reflectivity = Math.Clamp(reflectivity, 0.01, 1.0);
         }
 
         public Material (Color color, double reflectivity)
         {
             this.ambientColor = this.diffuseColor = this.specularColor = color;
-            this.reflectivity = Math.Clamp(reflectivity, 1, 64);
+            this.reflectivity = Math.Clamp(reflectivity, 0.01, 1.0);
         }
 
         public Material (Color color)
         {
             this.ambientColor = this.diffuseColor = this.specularColor = color;
-            this.reflectivity = 32;
+            this.reflectivity = 0.5;
         }
     }
 }
