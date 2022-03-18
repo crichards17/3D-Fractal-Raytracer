@@ -59,9 +59,11 @@ Next was some WPF / XAML work to implement Camera and Shape inputs and outputs. 
 The purple circle was great, but now it was time to tackle the lighting to give me some real 3D object renders. This required a new class of objects in the SceneLights, and then illumination calculations for the ray tracer to return pixel color when intersecting an object fragment. This ray tracer uses the Blinn-Phong lighting model, which calculates illumination from additive ambient, diffuse, and specular components. These are multiplied by the base color of the object (later on replaced by material properties for the respective illumination components) and returned to the pixel array. 
 
 This first image was taken after the "Blinn" model had been implemented. You can see that the specular highlight has a rather sharp dropoff, producing a noticeable "edge."
+
 <img src="https://github.com/crichards17/BoxRayTracer/blob/main/Progression/Captures/02-18_First_Lighting.PNG?raw=true" height="300" name="First_Lighting" style="display:block;">
 
 This second image demonstrates the difference that the "Phong" specular calculation makes to the illumination effect. The Phong calculation references the half-angle to the viewing plane and produces a smoother, more natural-looking specular highlight.
+
 <img src="https://github.com/crichards17/BoxRayTracer/blob/main/Progression/Captures/02-18_Blinn_Specular.PNG?raw=true" height="300" name="Blinn_Specular" style="display:block;">
 <br><br>
 
@@ -102,5 +104,6 @@ The initial box implementation above show a symmetrical cube, axis-aligned at th
 Next step in the lighting model is to implement reflections. Reflections work by casting a ray from the incident object fragment and checking for collision with another scene object, similar to the shadow rays. Unlike the shadow rays, however, the reflection ray adds the illumination value at that fragment to the ray's origin fragment -- multiplied by a "reflectivity" scalar -- and then recursively calls the same process again. An important inclusion here is a maximum-reflections parameter which persists through the recursive reflections calls, preventing what could otherwise be a prohibitively large number of reflection calls depending on the scene geometry.
 
 This first screenshot shows the first pass at reflections in the box-and-sphere scene, with the reflection count limited to 2.
+
 <img src="https://github.com/crichards17/BoxRayTracer/blob/main/Progression/Captures/03-13_Single_Reflections.PNG?raw=true" height="300" name="Single Reflections" style="display:block;">
 
