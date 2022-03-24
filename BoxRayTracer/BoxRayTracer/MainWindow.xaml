@@ -56,7 +56,7 @@
                     Click="Button_Default_Click"/>
             </Grid>
 
-            <Grid x:Name="shapeSelectorGrid"
+            <Grid x:Name="saveGrid"
                   Grid.Column="1"
                   Grid.Row="0"
                   Style="{StaticResource ControlBlock}">
@@ -65,18 +65,31 @@
                     <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
 
-                <Label Content="Shape" 
+                <Label Content="Image Title" 
                    HorizontalAlignment="Center" 
                    VerticalAlignment="Top"
                    VerticalContentAlignment="Center"
                    Height="25"
+                   Padding="0"
+                   Margin="0,5,0,0"
                    />
-                <ComboBox x:Name="shapeSelector"
-                    Grid.Row="0"
-                    HorizontalAlignment="Stretch"
+                <TextBox x:Name="imgTitle"
+                    Text=""
+                    Grid.Column="0" 
+                    Grid.Row="0" 
+                    HorizontalAlignment="Stretch" 
+                    Margin="5,0,5,5"
+                    TextWrapping="Wrap" 
                     VerticalAlignment="Bottom"
-                    Margin="0,0,0,3">
-                </ComboBox>
+                    />
+                <Button x:Name="btn_save" 
+                    Content="Save Image"
+                        Grid.Row="1"
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center" 
+                    Width="100" 
+                    Height="29"
+                    Click="Button_Save_Click"/>
 
             </Grid>
             
