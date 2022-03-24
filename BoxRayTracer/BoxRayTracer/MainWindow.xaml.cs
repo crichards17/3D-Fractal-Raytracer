@@ -13,6 +13,7 @@ namespace BoxRayTracer
 {
     public partial class MainWindow : Window
     {
+        private BitmapImage? currentBmp;
         public MainWindow()
         {
             InitializeComponent();
@@ -31,6 +32,14 @@ namespace BoxRayTracer
             SetDefaults();
         }
 
+        private void Button_Save_Click(object sender, RoutedEventArgs e)
+        {
+            if (imgTitle.Text != "")
+            {
+                Save(currentBmp, $"C:\\Users\\cameron.richards\\Documents\\BRT\\{imgTitle.Text}.PNG");
+            }
+        }
+
         private void OnKeyDownHandler(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Return)
@@ -46,7 +55,8 @@ namespace BoxRayTracer
             imageContainer.Width = double.Parse(resXBox.Text);
             imageContainer.Height = double.Parse(resYBox.Text);
             BitmapRaytracer bmpTracer = GetBRT();
-            imageContainer.Source = BitmapToImageSource(bmpTracer.Render());
+            currentBmp = BitmapToImageSource(bmpTracer.Render());
+            imageContainer.Source = currentBmp;
             SetParamFields(bmpTracer);
         }
         
@@ -63,6 +73,17 @@ namespace BoxRayTracer
                 bitmapimage.EndInit();
 
                 return bitmapimage;
+            }
+        }
+
+        private static void Save(BitmapImage image, string filePath)
+        {
+            BitmapEncoder encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(image));
+
+            using (var fileStream = new System.IO.FileStream(filePath, System.IO.FileMode.Create))
+            {
+                encoder.Save(fileStream);
             }
         }
 
@@ -100,8 +121,8 @@ namespace BoxRayTracer
             camFrusY.Text = Defaults.camFrusY.ToString();
             camFrusZ.Text = Defaults.camFrusZ.ToString();
 
-            shapeSelector.ItemsSource = Defaults.shapeList;
-            shapeSelector.SelectedIndex = Defaults.shapeDefaultIndex;
+            //shapeSelector.ItemsSource = Defaults.shapeList;
+            //shapeSelector.SelectedIndex = Defaults.shapeDefaultIndex;
 
             objColorSelector.ItemsSource = typeof(System.Windows.Media.Colors).GetProperties();
             objColorSelector.SelectedItem = typeof(System.Windows.Media.Colors).GetProperty(Defaults.objColor);
