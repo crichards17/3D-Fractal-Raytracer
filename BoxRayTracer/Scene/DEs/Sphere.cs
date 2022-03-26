@@ -19,10 +19,5 @@ namespace Scene
         {
             return Math.Max(0, (rayOrigin - position).Length() - radius);
         }
-
-        protected override Vector GetNormal (Vector surfacePos)
-        {
-            return (surfacePos - position);
-        }
     }
 }

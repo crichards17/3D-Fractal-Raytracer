@@ -85,7 +85,7 @@ namespace BoxRayTracer
             {
                 // Do the B.P. thing
                 Scene.Color outColor = new Scene.Color(0, 0, 0);
-                Vector normal = collisionObj.Normal(fragPos.Value);
+                Vector normal = collisionObj.Normal(fragPos.Value, rayDir);
                 for (int i = 0; i < sceneStage.sceneLights.Length; i++)
                 {
                     outColor += BPContribution(sceneStage.sceneLights[i], fragPos.Value, normal, collisionObj.material, camera.camPos);
@@ -103,8 +103,8 @@ namespace BoxRayTracer
             Scene.Color reflectionColor = Scene.Color.Black;
             if (reflectionDepth < Defaults.maxReflections)
             {
-                Vector normal = collisionObj.Normal(fragmentPos);
                 Vector incident = (fragmentPos - fromPos).Unit();
+                Vector normal = collisionObj.Normal(fragmentPos, incident);
                 Vector reflectV = (incident - 2 * incident.Dot(normal) * normal);
                 RayMarch(fragmentPos + reflectV * Utilities.eps, reflectV, 100, out SceneObjectEstimatable reflectionObj, out Vector? reflectionObjPos);
                 if (reflectionObj != null && reflectionObjPos != null)
