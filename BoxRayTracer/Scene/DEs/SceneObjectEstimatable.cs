@@ -14,6 +14,11 @@ namespace Scene
         public Material material { get; protected set; }
         
         /// <summary>
+        /// Minimum evaluation distance, for use by the ray marcher
+        /// </summary>
+        public double minDist { get; protected set; }
+
+        /// <summary>
         /// Estimates the minimum distance to the object
         /// </summary>
         /// <param name="rayOrigin">The point from which to estimate distance to the object</param>

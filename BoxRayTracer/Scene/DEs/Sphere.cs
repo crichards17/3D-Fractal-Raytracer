@@ -4,7 +4,6 @@ namespace Scene
 {
     public class Sphere : SceneObjectEstimatable
     {
-
         private readonly double radius;
 
         public Sphere(Vector position, Material material, double radius)
@@ -12,6 +11,7 @@ namespace Scene
             this.position = position;
             this.material = material;
             this.radius = radius;
+            minDist = Utilities.eps;
         }
 
 

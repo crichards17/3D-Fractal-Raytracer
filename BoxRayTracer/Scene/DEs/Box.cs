@@ -16,6 +16,7 @@ namespace Scene
             this.material = material;
             this.facingV = Vector.unitZ;
             this.topV = Vector.unitY;
+            minDist = Utilities.eps;
         }
 
         public Box(Vector center, Vector widthHeightDepth, Material material, Vector facingV, Vector topV)
@@ -25,6 +26,7 @@ namespace Scene
             this.material = material;
             this.facingV = facingV.Unit();
             this.topV = topV.Unit();
+            minDist = Utilities.eps;
         }
         #endregion
 
