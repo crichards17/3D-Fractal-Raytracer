@@ -14,14 +14,14 @@ namespace BoxRayTracer
     {
         // Camera defaults
         public const double camPosX = -2;
-        public const double camPosY = 0.75;
+        public const double camPosY = 0.5;
         public const double camPosZ = 2;
 
         public const double camFrusX = 1;
         public const double camFrusY = -0.2;
         public const double camFrusZ = -1;
 
-        public const double fov = 70;
+        public const double fov = 50;
 
         // Object defaults
         public const double objPosX = 0;
@@ -40,6 +40,7 @@ namespace BoxRayTracer
         // Render defaults
         public const double maxDist = 20;
         public const int maxMarch = 300;
+        public const int ambientMarchCutoff = 100;
         public const double imgWidth = 1024;
         public const double imgHeight = 1024;
 
@@ -51,10 +52,12 @@ namespace BoxRayTracer
 #endif
 
         // Light defaults
-        private static readonly AmbientLight globalAmbient1 = new AmbientLight(Color.White, 0.5);
+        private static readonly AmbientLight globalAmbient1 = new AmbientLight(new Color(0.95, 1.0, 1.0), 1.0);
+        public static readonly Color globalAmbientColor = new Color(0.95, 1.0, 1.0);
+        public static readonly double globalAmbientIntensity = 1.0;
 
         // "Sun"
-        private static readonly GlobalDiffuseLight globalDiffuseLight1 = new GlobalDiffuseLight(new Color(0.98, 0.84, 0.01), 0.5, new Vector(1, -2, -1));
+        private static readonly GlobalDiffuseLight globalDiffuseLight1 = new GlobalDiffuseLight(new Color(0.98, 0.84, 0.01), 1.0, new Vector(1, -2, -1));
 
         // Blue point light
         private static readonly PointLight pointLight1 = new PointLight(new Color(0.01, 0.84, 0.98), 0.5, 0.8, new Vector(-5, 7, -5));

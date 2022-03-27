@@ -174,7 +174,8 @@ namespace BoxRayTracer
             // Get Color selections from the UI color picker, convert to Scene.Color objects
             
             System.Windows.Media.Color backColorMedia = (System.Windows.Media.Color)(backColorSelector.SelectedItem as System.Reflection.PropertyInfo).GetValue(null, null);
-            Scene.Color backColorScene = new Scene.Color((double)backColorMedia.R / 255, (double)backColorMedia.G / 255, (double)backColorMedia.B / 255);
+            //Scene.Color backColorScene = new Scene.Color((double)backColorMedia.R / 255, (double)backColorMedia.G / 255, (double)backColorMedia.B / 255);
+            Scene.Color backColorScene = Defaults.globalAmbientColor * Defaults.globalAmbientIntensity;
 
             // TODO: Pass lights from UI / state to brt
             SceneStage sceneStage = new SceneStage(objects, Defaults.sceneLights, backColorScene);

@@ -84,7 +84,7 @@ namespace BoxRayTracer
         private Scene.Color ColorForPixel(uint x, uint y)
         {
             camera.RayForPixel(x, y, out Vector pos, out Vector rayDir);
-            RayMarch(pos, rayDir, Defaults.maxMarch, out SceneObjectEstimatable collisionObj, out Vector? fragPos);
+            RayMarch(pos, rayDir, Defaults.maxMarch, out int marchCount, out SceneObjectEstimatable collisionObj, out Vector? fragPos);
             if (collisionObj != null && fragPos != null)
             {
                 // Do the B.P. thing
@@ -92,7 +92,7 @@ namespace BoxRayTracer
                 Vector normal = collisionObj.Normal(fragPos.Value, rayDir);
                 for (int i = 0; i < sceneStage.sceneLights.Length; i++)
                 {
-                    outColor += BPContribution(sceneStage.sceneLights[i], fragPos.Value, normal, collisionObj.material, collisionObj.minDist, camera.camPos);
+                    outColor += BPContribution(sceneStage.sceneLights[i], fragPos.Value, normal, collisionObj.material, collisionObj.minDist, camera.camPos, marchCount);
                 }
                 // Add reflections;
                 outColor += GetReflections(0, collisionObj, fragPos.Value, camera.camPos);
@@ -110,13 +110,13 @@ namespace BoxRayTracer
                 Vector incident = (fragmentPos - fromPos).Unit();
                 Vector normal = collisionObj.Normal(fragmentPos, incident);
                 Vector reflectV = (incident - 2 * incident.Dot(normal) * normal);
-                RayMarch(fragmentPos + reflectV * Utilities.eps, reflectV, 100, out SceneObjectEstimatable reflectionObj, out Vector? reflectionObjPos);
+                RayMarch(fragmentPos + reflectV * Utilities.eps, reflectV, Defaults.maxMarch, out int marchCount, out SceneObjectEstimatable reflectionObj, out Vector? reflectionObjPos);
                 if (reflectionObj != null && reflectionObjPos != null)
                 {
                     Scene.Color reflectObjColor = Scene.Color.Black;
                     for (int i = 0; i < sceneStage.sceneLights.Length; i++)
                     {
-                        reflectObjColor += BPContribution(sceneStage.sceneLights[i], reflectionObjPos.Value, normal, reflectionObj.material, reflectionObj.minDist, fragmentPos);
+                        reflectObjColor += BPContribution(sceneStage.sceneLights[i], reflectionObjPos.Value, normal, reflectionObj.material, reflectionObj.minDist, fragmentPos, marchCount);
                     }
                     reflectObjColor += GetReflections(reflectionDepth + 1, reflectionObj, reflectionObjPos.Value, fragmentPos);
                     reflectionColor += reflectObjColor * collisionObj.material.reflectivity * collisionObj.material.diffuseColor;
@@ -146,12 +146,14 @@ namespace BoxRayTracer
         /// <param name="fragPos">Scene-space position of the object fragment</param>
         /// <param name="obj">Object being evaluated</param>
         /// <returns></returns>
-        private Scene.Color BPContribution(SceneLight sceneLight, Vector fragPos, Vector normal, Material objMaterial, double minDist, Vector camPos)
+        private Scene.Color BPContribution(SceneLight sceneLight, Vector fragPos, Vector normal, Material objMaterial, double minDist, Vector camPos, int marches)
         {
-            Scene.Color compoundColor = new Scene.Color(0, 0, 0);
+            Scene.Color compoundColor = Scene.Color.Black;
 
-            // Ambient light component:
-            compoundColor += sceneLight.color * sceneLight.iAmbient * objMaterial.ambientColor;
+            // Ambient light component with occlusion:
+            double occludeLevel = 1.0 / (255 * (double)marches / Defaults.maxMarch);
+            occludeLevel += (1 - occludeLevel) / 8;
+            compoundColor += sceneLight.color * sceneLight.iAmbient * objMaterial.ambientColor * occludeLevel;
 
             // Only apply Diffuse and Specular if the vector to the light source is non-zero
             //  (Enables SpotLight lighting region check, and avoids undefined light behavior)
@@ -162,7 +164,7 @@ namespace BoxRayTracer
             if (!vToLight.Equals(Vector.origin) && !vToLight.IsOrtho(normal))
             {
                 // Ray march along vToLight
-                RayMarch(fragPos + normal * minDist, vToLight, int.MaxValue, out SceneObjectEstimatable collisionObj, out Vector? _);
+                RayMarch(fragPos + normal * minDist, vToLight, int.MaxValue, out int marchCount, out SceneObjectEstimatable collisionObj, out Vector? _);
                 
                 // Apply diffuse and specular if no object is intersected (shadowing)
                 if (collisionObj == null)
@@ -201,12 +203,11 @@ namespace BoxRayTracer
             }
         }
 
-        private void RayMarch(Vector pos, Vector rayDir, int maxMarch, out SceneObjectEstimatable collisionObj, out Vector? fragPos)
+        private void RayMarch(Vector pos, Vector rayDir, int maxMarch, out int marchCount, out SceneObjectEstimatable collisionObj, out Vector? fragPos)
         {
             GetNearestObject(pos, out SceneObjectEstimatable nearestObj, out double currentDist);
-            // Possible infinite looping?
-            int marchCount = 0;
-            
+            marchCount = 0;
+
             while (currentDist <= maxDist && marchCount < maxMarch)
             {
                 if (Utilities.IsEqualApprox(currentDist, 0))
@@ -227,6 +228,7 @@ namespace BoxRayTracer
             }
             collisionObj = null;
             fragPos = null;
+            marchCount = 0;
         }
 
         /// <summary>
