@@ -65,6 +65,10 @@ namespace BoxRayTracer
             {
                 uint x = (uint)(pixelIndex % dWidth);
                 uint y = (uint)(pixelIndex / dWidth);
+                if (x == dWidth / 3 && y == dHeight / 3)
+                {
+                    Console.WriteLine();
+                }
                 outColors[pixelIndex] = ColorForPixel(x, y);
             }
 #endif
@@ -85,10 +89,10 @@ namespace BoxRayTracer
             {
                 // Do the B.P. thing
                 Scene.Color outColor = new Scene.Color(0, 0, 0);
-                Vector normal = collisionObj.Normal(fragPos.Value);
+                Vector normal = collisionObj.Normal(fragPos.Value, rayDir);
                 for (int i = 0; i < sceneStage.sceneLights.Length; i++)
                 {
-                    outColor += BPContribution(sceneStage.sceneLights[i], fragPos.Value, normal, collisionObj.material, camera.camPos);
+                    outColor += BPContribution(sceneStage.sceneLights[i], fragPos.Value, normal, collisionObj.material, collisionObj.minDist, camera.camPos);
                 }
                 // Add reflections;
                 outColor += GetReflections(0, collisionObj, fragPos.Value, camera.camPos);
@@ -103,8 +107,8 @@ namespace BoxRayTracer
             Scene.Color reflectionColor = Scene.Color.Black;
             if (reflectionDepth < Defaults.maxReflections)
             {
-                Vector normal = collisionObj.Normal(fragmentPos);
                 Vector incident = (fragmentPos - fromPos).Unit();
+                Vector normal = collisionObj.Normal(fragmentPos, incident);
                 Vector reflectV = (incident - 2 * incident.Dot(normal) * normal);
                 RayMarch(fragmentPos + reflectV * Utilities.eps, reflectV, 100, out SceneObjectEstimatable reflectionObj, out Vector? reflectionObjPos);
                 if (reflectionObj != null && reflectionObjPos != null)
@@ -112,7 +116,7 @@ namespace BoxRayTracer
                     Scene.Color reflectObjColor = Scene.Color.Black;
                     for (int i = 0; i < sceneStage.sceneLights.Length; i++)
                     {
-                        reflectObjColor += BPContribution(sceneStage.sceneLights[i], reflectionObjPos.Value, normal, reflectionObj.material, fragmentPos);
+                        reflectObjColor += BPContribution(sceneStage.sceneLights[i], reflectionObjPos.Value, normal, reflectionObj.material, reflectionObj.minDist, fragmentPos);
                     }
                     reflectObjColor += GetReflections(reflectionDepth + 1, reflectionObj, reflectionObjPos.Value, fragmentPos);
                     reflectionColor += reflectObjColor * collisionObj.material.reflectivity * collisionObj.material.diffuseColor;
@@ -142,7 +146,7 @@ namespace BoxRayTracer
         /// <param name="fragPos">Scene-space position of the object fragment</param>
         /// <param name="obj">Object being evaluated</param>
         /// <returns></returns>
-        private Scene.Color BPContribution(SceneLight sceneLight, Vector fragPos, Vector normal, Material objMaterial, Vector camPos)
+        private Scene.Color BPContribution(SceneLight sceneLight, Vector fragPos, Vector normal, Material objMaterial, double minDist, Vector camPos)
         {
             Scene.Color compoundColor = new Scene.Color(0, 0, 0);
 
@@ -158,7 +162,7 @@ namespace BoxRayTracer
             if (!vToLight.Equals(Vector.origin) && !vToLight.IsOrtho(normal))
             {
                 // Ray march along vToLight
-                RayMarch(fragPos + normal * Utilities.eps, vToLight, int.MaxValue, out SceneObjectEstimatable collisionObj, out Vector? _);
+                RayMarch(fragPos + normal * minDist, vToLight, int.MaxValue, out SceneObjectEstimatable collisionObj, out Vector? _);
                 
                 // Apply diffuse and specular if no object is intersected (shadowing)
                 if (collisionObj == null)
@@ -207,8 +211,14 @@ namespace BoxRayTracer
             {
                 if (Utilities.IsEqualApprox(currentDist, 0))
                 {
-                    collisionObj =  nearestObj;
+                    collisionObj = nearestObj;
                     fragPos = pos;
+                    return;
+                }
+                else if (currentDist < nearestObj.minDist)
+                {
+                    collisionObj = nearestObj;
+                    fragPos = pos -= rayDir * collisionObj.minDist;
                     return;
                 }
                 pos += rayDir * currentDist;

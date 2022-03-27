@@ -113,6 +113,18 @@ namespace Scene
             return new Vector(Math.Abs(this.x), Math.Abs(this.y), Math.Abs(this.z));
         }
 
+        
+        /// <summary>
+        /// Recturns a vector whose components have been clamped by the provided minimum and maximum values
+        /// </summary>
+        /// <param name="min">Minimum clamping value</param>
+        /// <param name="max">Maximum clamping value</param>
+        /// <returns>new clamped Vector</returns>
+        public Vector Clamp(double min, double max)
+        {
+            return new Vector(Math.Clamp(this.x, min, max), Math.Clamp(this.y, min, max), Math.Clamp(this.z, min, max));
+        }
+
         /// <summary>
         /// Returns true if the instance Vector is parallel to
         ///     the param Vector other

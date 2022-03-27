@@ -36,7 +36,7 @@ namespace BoxRayTracer
         {
             if (imgTitle.Text != "")
             {
-                Save(currentBmp, $"C:\\Users\\cameron.richards\\Documents\\BRT\\{imgTitle.Text}.PNG");
+                Save(currentBmp, imgTitle.Text);
             }
         }
 
@@ -76,12 +76,14 @@ namespace BoxRayTracer
             }
         }
 
-        private static void Save(BitmapImage image, string filePath)
+        private static void Save(BitmapImage image, string fileName)
         {
             BitmapEncoder encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(image));
 
-            using (var fileStream = new System.IO.FileStream(filePath, System.IO.FileMode.Create))
+            string brtPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\BRT";
+            System.IO.Directory.CreateDirectory(brtPath);
+            using (var fileStream = new System.IO.FileStream($"{brtPath}//{fileName}.PNG", System.IO.FileMode.Create))
             {
                 encoder.Save(fileStream);
             }

@@ -4,7 +4,6 @@ namespace Scene
 {
     public class Sphere : SceneObjectEstimatable
     {
-
         private readonly double radius;
 
         public Sphere(Vector position, Material material, double radius)
@@ -12,17 +11,13 @@ namespace Scene
             this.position = position;
             this.material = material;
             this.radius = radius;
+            minDist = Utilities.eps;
         }
 
 
         public override double DE(Vector rayOrigin)
         {
             return Math.Max(0, (rayOrigin - position).Length() - radius);
-        }
-
-        protected override Vector GetNormal (Vector surfacePos)
-        {
-            return (surfacePos - position);
         }
     }
 }
