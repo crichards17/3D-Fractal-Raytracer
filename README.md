@@ -101,9 +101,28 @@ The initial box implementation above show a symmetrical cube, axis-aligned at th
 
 ### Reflections
 
-Next step in the lighting model is to implement reflections. Reflections work by casting a ray from the incident object fragment and checking for collision with another scene object, similar to the shadow rays. Unlike the shadow rays, however, the reflection ray adds the illumination value at that fragment to the ray's origin fragment -- multiplied by a "reflectivity" scalar -- and then recursively calls the same process again. An important inclusion here is a maximum-reflections parameter which persists through the recursive reflections calls, preventing what could otherwise be a prohibitively large number of reflection calls depending on the scene geometry.
+The next step in the lighting model was to implement reflections. Reflections work by casting a ray from the incident object fragment and checking for collision with another scene object, similar to the shadow rays. Unlike the shadow rays, however, the reflection ray adds the illumination value at that fragment to the ray's origin fragment -- multiplied by a "reflectivity" scalar -- and then recursively calls the same process again. An important inclusion here is a maximum-reflections parameter which persists through the recursive reflections calls, preventing what could otherwise be a prohibitively large number of reflection calls depending on the scene geometry.
 
 This first screenshot shows the first pass at reflections in the box-and-sphere scene, with the reflection count limited to 2.
 
 <img src="https://github.com/crichards17/BoxRayTracer/blob/main/Progression/Captures/03-13_Single_Reflections.PNG?raw=true" height="300" name="Single Reflections" style="display:block;">
+<br><br>
+
+### Fractals
+
+Now that the lighting model supports the major components I had wanted (BP ambient/diffuse/specular, shadows, reflections), it was a good time to dive in and try implementing the initial impetus for the whole project -- 3D fractals! These are modeled by DE equations that predominantly come from prior art. However, they required a fair amount of troubleshooting to make adjustments to the configuration and implementation details. 
+
+The first shape I attempted was the "Mandlebox." My initial attempt at translating the DE for this one into my model -- pictured below -- did not work as expected. After much troubleshooting I decided to set it aside for the time being and try a different DE to see if I had a pervasive issue in my model that would affect all estimated shapes.
+
+My next attempt, then, was to implement the "Mandlebulb." Much to my surprise (and troubleshooting chagrin), this one worked beautifully after some tweaking of the various variables that make up the shape definition.
+
+<img src="https://github.com/crichards17/BoxRayTracer/blob/main/Progression/Captures/03-20_Mandlebulb_Initial.PNG?raw=true" height="300" name="Initial Mandlebulb" style="display:block;">
+<br><br>
+
+### Ambient Occlusion
+
+The Mandlebulb shape itself was displaying well, but certainly missing some visual depth.Next on my list was to add ambient occlusion, which has the effect of adding contrast to nooks and crannies, as well as darkening portions of a shape that are further away from the camera. The method I've opted for is to reference the number of marches the ray march takes to reach a given object fragment, with the resulting pixel color value returning as darker for those that required more marches. Because of the way that the distance estimation march works, this has the effect of darkening fragments that are further away, as well as fragments that are near other faces or features. This resulting effect can be seen in the below image.   
+
+<img src="https://github.com/crichards17/BoxRayTracer/blob/main/Progression/Captures/03-25_Mandlebulb_Occluded.PNG?raw=true" height="300" name="Occluded Mandlebulb" style="display:block;">
+<br><br>
 
