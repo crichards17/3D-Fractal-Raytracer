@@ -6,7 +6,7 @@ This application is a CPU-side 3D rendering engine with accompanying WPF front-e
 ## Purpose
 This application is being developed with twofold purpose:
 1. As a learning opportunity. This application's development has required that I either expand my prior knowledge or learn from scratch in the followign areas:
-    * C# development
+    * C# / .NET development
     * Top-down object-oriented design and solution structure
     * 3D rendering via Distance Estimation (and associated vector math)
     * Lighting principles and implementation
@@ -14,10 +14,11 @@ This application is being developed with twofold purpose:
 2. The rendering core is being built to accomodate a subsequent effort which will implement a GPU-side rendering pipeline.
 
 ## Technologies/principles used
-* C#
-* Distance Estimation based raytracing model
+* C# / .NET
+* Raytracing / raymarching, including shadow and reflection rays
+* Distance field object representation
 * Blinn-Phong lighting model for ambient, diffuse, and specular components
-* Shadow and reflection rays
+* 3D Fractals
 
 ## Development
 The remainder of this document will serve as a development journal for recording progress, challenges, and milestones.
@@ -125,7 +126,7 @@ My next attempt, then, was to implement the "Mandlebulb." Much to my surprise (a
 
 ### Ambient Occlusion
 
-The Mandlebulb shape itself was displaying well, but certainly missing some visual depth.Next on my list was to add ambient occlusion, which has the effect of adding contrast to nooks and crannies, as well as darkening portions of a shape that are further away from the camera. The method I've opted for is to reference the number of marches the ray march takes to reach a given object fragment, with the resulting pixel color value returning as darker for those that required more marches. Because of the way that the distance estimation march works, this has the effect of darkening fragments that are further away, as well as fragments that are near other faces or features. This resulting effect can be seen in the below image.   
+The Mandlebulb shape itself was displaying well, but certainly missing some visual depth. Next on my list was to add ambient occlusion, which has the effect of adding contrast to nooks and crannies, as well as darkening portions of a shape that are further away from the camera. The method I've opted for is to reference the number of marches the ray march takes to reach a given object fragment, with the resulting pixel color value returning as darker for those that required more marches. Because of the way that the distance estimation march works, this has the effect of darkening fragments that are further away, as well as fragments that are near other faces or features. This resulting effect can be seen in the below image.   
 
 <img src="https://github.com/crichards17/BoxRayTracer/blob/main/Progression/Captures/03-25_Mandlebulb_Occluded.PNG?raw=true" height="300" name="Occluded Mandlebulb" style="display:block;">
 <br><br>
