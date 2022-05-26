@@ -1,4 +1,4 @@
-# BoxRayTracer
+# 3D Fractal Raytracer
 
 ## Description
 This application is a CPU-side 3D rendering engine with accompanying WPF front-end. Allows for static visualization of multiple objects and lights in a given scene, with configurable parameters for objects, lighting, and camera. 
