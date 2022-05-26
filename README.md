@@ -67,6 +67,10 @@ This second image demonstrates the difference that the "Phong" specular calculat
 <img src="https://github.com/crichards17/BoxRayTracer/blob/main/Progression/Captures/02-18_Blinn_Specular.PNG?raw=true" height="300" name="Blinn_Specular" style="display:block;">
 <br><br>
 
+### Multithreading
+
+Initially the render had been running in a single thread. One of my MVP items was to enable multithreading, and this was a good time to tackle that since the render complexity was now starting to noticeably slow down my testing and progression. The raytracer uses C#'s Parallel.For, and references the Environment.Processorcount environment variable to define the thread pool. I was pleasantly surprised with how painless it was to implement this in C#, with minimal uplift to translate my existing single-thread render loop.
+
 ### Multiple Objects in the scene
 
 So far, the scene had been exclusively composed of a single image. This next bit of work involved reconfiguring the object structure for the Scene and its constituent components, including how those components were processed by the ray tracer. Because of the nature of distance estimation, each ray march needs to check all Scene objects for proximity, and respond accordingly. The result here was the ability to render multiple objects in the scene 
