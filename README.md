@@ -6,7 +6,7 @@ This application is a multithreaded CPU-side 3D rendering engine with accompanyi
 
 ## Purpose
 This application is being developed with twofold purpose:
-1. As a learning opportunity. This application's development has required that I either expand my prior knowledge or learn from scratch in the followign areas:
+1. As a learning opportunity. This application's development has required that I either expand my prior knowledge or learn from scratch in the following areas:
     * C# / .NET development.
     * Top-down object-oriented design and solution structure.
     * 3D rendering via Distance Estimation (and associated vector math).
@@ -55,7 +55,7 @@ The result is a rendered 3D sphere, though with no lighting effects it appears o
 
 ### Front-end controls for Camera and Object parameters
 
-Next was some WPF / XAML work to implement Camera and Shape inputs and outputs. This initial pass is relatively simplistic. My priority at this stage was to learn the XAML and get a working implementation so that I cuold continue forward with the rendering development which was otherwise blocked. I'll revisit the frontend later on once I have a better idea of the specific functionality I want.
+Next was some WPF / XAML work to implement Camera and Shape inputs and outputs. This initial pass is relatively simplistic. My priority at this stage was to learn the XAML and get a working implementation so that I could continue forward with the rendering development which was otherwise blocked. I'll revisit the frontend later on once I have a better idea of the specific functionality I want.
 
 <img src="https://github.com/crichards17/BoxRayTracer/blob/main/Progression/Captures/02-15_Rendering_Controls.PNG?raw=true" height="300" name="Rendering_Controls" style="display:block;">
 <br><br>
