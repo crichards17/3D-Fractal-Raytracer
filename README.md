@@ -1,4 +1,5 @@
 # 3D Fractal Raytracer
+<img src="https://github.com/crichards17/BoxRayTracer/blob/main/Progression/Captures/Progression.gif?raw=true" height="300" name="Proogression" style="display:block;">
 
 ## Description
 This application is a multithreaded CPU-side 3D rendering engine with accompanying WPF front-end. An extensibility model allows for static visualization of multiple objects and lights in a given scene, with configurable parameters for objects, lighting, and camera. 
