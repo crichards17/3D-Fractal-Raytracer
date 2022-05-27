@@ -7,19 +7,23 @@ This application is a multithreaded CPU-side 3D rendering engine with accompanyi
 ## Purpose
 This application is being developed with twofold purpose:
 1. As a learning opportunity. This application's development has required that I either expand my prior knowledge or learn from scratch in the followign areas:
-    * C# / .NET development
-    * Top-down object-oriented design and solution structure
-    * 3D rendering via Distance Estimation (and associated vector math)
-    * Lighting principles and implementation
+    * C# / .NET development.
+    * Top-down object-oriented design and solution structure.
+    * 3D rendering via Distance Estimation (and associated vector math).
+    * Lighting principles and implementation.
     * ...and more to come!
 2. The rendering core is being built to accomodate a subsequent effort which will implement a GPU-side rendering pipeline.
 
 ## Technologies/principles used
-* C# / .NET
-* Raytracing / raymarching, including shadow and reflection rays
-* Distance field object representation
-* Blinn-Phong lighting model for ambient, diffuse, and specular components
+* C# / .NET.
+* Ray tracing / raymarching, including shadow and reflection rays.
+    * The [Wikipedia](https://en.wikipedia.org/wiki/Ray_tracing_(graphics)) article is a helpful intro to the concept, including a section and link for SDF (Signed Distance Function) ray marching. 
+* Distance field object representation.
+    * Inigo Quilez (creator of [Shadertoy](https://www.shadertoy.com/)) has written a number of high quality articles regarding distance field raymarching, which he hosts on his [website](https://iquilezles.org/). I referenced [this one](https://iquilezles.org/articles/sdfbounding/) as an intro when first exploring this space.
+* Blinn-Phong lighting model for ambient, diffuse, and specular components.
+    * I referenced [this page](https://learnopengl.com/Advanced-Lighting/Advanced-Lighting) from Learn OpenGL to learn about the Blinn-Phong model and its mathematical implementation.
 * 3D Fractals
+    * [Mandlebulb.com](https://www.mandelbulb.com/3d-fractal-art-mandelmorphs/) hosts a helpful primer on 3-dimensional fractals.
 
 ## Development
 The remainder of this document will serve as a development journal for recording progress, challenges, and milestones.
