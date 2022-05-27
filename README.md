@@ -1,5 +1,4 @@
 # 3D Fractal Raytracer
-A raytracing engine for distance field-based 3D fractals.
 
 ## Description
 This application is a multithreaded CPU-side 3D rendering engine with accompanying WPF front-end. An extensibility model allows for static visualization of multiple objects and lights in a given scene, with configurable parameters for objects, lighting, and camera. 
