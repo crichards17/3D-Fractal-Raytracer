@@ -5,7 +5,7 @@ file
     ;
 
 setting
-    : key COLON value
+    : key COLON value SEMICOLON
     ;
 
 key
@@ -39,6 +39,10 @@ list
 
 COLON
     : ':'
+    ;
+
+SEMICOLON
+    : ';'
     ;
 
 INT
