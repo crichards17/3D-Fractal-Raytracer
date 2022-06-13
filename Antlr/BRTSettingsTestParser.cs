@@ -36,8 +36,8 @@ public partial class BRTSettingsTestParser : Parser {
 	protected static DFA[] decisionToDFA;
 	protected static PredictionContextCache sharedContextCache = new PredictionContextCache();
 	public const int
-		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, COLON=6, INT=7, DOUBLE=8, BOOL=9, 
-		STRING=10;
+		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, COLON=6, SEMICOLON=7, INT=8, DOUBLE=9, 
+		BOOL=10, STRING=11;
 	public const int
 		RULE_file = 0, RULE_setting = 1, RULE_key = 2, RULE_value = 3, RULE_primitive = 4, 
 		RULE_array = 5, RULE_vector = 6, RULE_list = 7;
@@ -46,11 +46,11 @@ public partial class BRTSettingsTestParser : Parser {
 	};
 
 	private static readonly string[] _LiteralNames = {
-		null, "'['", "']'", "'<'", "'>'", "','", "':'"
+		null, "'['", "']'", "'<'", "'>'", "','", "':'", "';'"
 	};
 	private static readonly string[] _SymbolicNames = {
-		null, null, null, null, null, null, "COLON", "INT", "DOUBLE", "BOOL", 
-		"STRING"
+		null, null, null, null, null, null, "COLON", "SEMICOLON", "INT", "DOUBLE", 
+		"BOOL", "STRING"
 	};
 	public static readonly IVocabulary DefaultVocabulary = new Vocabulary(_LiteralNames, _SymbolicNames);
 
@@ -150,6 +150,7 @@ public partial class BRTSettingsTestParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public ValueContext value() {
 			return GetRuleContext<ValueContext>(0);
 		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SEMICOLON() { return GetToken(BRTSettingsTestParser.SEMICOLON, 0); }
 		public SettingContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -176,6 +177,8 @@ public partial class BRTSettingsTestParser : Parser {
 			Match(COLON);
 			State = 25;
 			value();
+			State = 26;
+			Match(SEMICOLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -211,7 +214,7 @@ public partial class BRTSettingsTestParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 27;
+			State = 28;
 			Match(STRING);
 			}
 		}
@@ -254,7 +257,7 @@ public partial class BRTSettingsTestParser : Parser {
 		ValueContext _localctx = new ValueContext(Context, State);
 		EnterRule(_localctx, 6, RULE_value);
 		try {
-			State = 32;
+			State = 33;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case INT:
@@ -263,21 +266,21 @@ public partial class BRTSettingsTestParser : Parser {
 			case STRING:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 29;
+				State = 30;
 				primitive();
 				}
 				break;
 			case T__0:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 30;
+				State = 31;
 				array();
 				}
 				break;
 			case T__2:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 31;
+				State = 32;
 				vector();
 				}
 				break;
@@ -322,7 +325,7 @@ public partial class BRTSettingsTestParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 34;
+			State = 35;
 			_la = TokenStream.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << INT) | (1L << DOUBLE) | (1L << BOOL) | (1L << STRING))) != 0)) ) {
 			ErrorHandler.RecoverInline(this);
@@ -368,11 +371,11 @@ public partial class BRTSettingsTestParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 36;
-			Match(T__0);
 			State = 37;
-			list();
+			Match(T__0);
 			State = 38;
+			list();
+			State = 39;
 			Match(T__1);
 			}
 		}
@@ -411,11 +414,11 @@ public partial class BRTSettingsTestParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 40;
-			Match(T__2);
 			State = 41;
-			list();
+			Match(T__2);
 			State = 42;
+			list();
+			State = 43;
 			Match(T__3);
 			}
 		}
@@ -458,21 +461,21 @@ public partial class BRTSettingsTestParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 44;
+			State = 45;
 			value();
-			State = 49;
+			State = 50;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==T__4) {
 				{
 				{
-				State = 45;
-				Match(T__4);
 				State = 46;
+				Match(T__4);
+				State = 47;
 				value();
 				}
 				}
-				State = 51;
+				State = 52;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -491,46 +494,47 @@ public partial class BRTSettingsTestParser : Parser {
 
 	private static char[] _serializedATN = {
 		'\x3', '\x608B', '\xA72A', '\x8133', '\xB9ED', '\x417C', '\x3BE7', '\x7786', 
-		'\x5964', '\x3', '\f', '\x37', '\x4', '\x2', '\t', '\x2', '\x4', '\x3', 
+		'\x5964', '\x3', '\r', '\x38', '\x4', '\x2', '\t', '\x2', '\x4', '\x3', 
 		'\t', '\x3', '\x4', '\x4', '\t', '\x4', '\x4', '\x5', '\t', '\x5', '\x4', 
 		'\x6', '\t', '\x6', '\x4', '\a', '\t', '\a', '\x4', '\b', '\t', '\b', 
 		'\x4', '\t', '\t', '\t', '\x3', '\x2', '\x6', '\x2', '\x14', '\n', '\x2', 
 		'\r', '\x2', '\xE', '\x2', '\x15', '\x3', '\x2', '\x3', '\x2', '\x3', 
-		'\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x4', '\x3', 
-		'\x4', '\x3', '\x5', '\x3', '\x5', '\x3', '\x5', '\x5', '\x5', '#', '\n', 
-		'\x5', '\x3', '\x6', '\x3', '\x6', '\x3', '\a', '\x3', '\a', '\x3', '\a', 
-		'\x3', '\a', '\x3', '\b', '\x3', '\b', '\x3', '\b', '\x3', '\b', '\x3', 
-		'\t', '\x3', '\t', '\x3', '\t', '\a', '\t', '\x32', '\n', '\t', '\f', 
-		'\t', '\xE', '\t', '\x35', '\v', '\t', '\x3', '\t', '\x2', '\x2', '\n', 
-		'\x2', '\x4', '\x6', '\b', '\n', '\f', '\xE', '\x10', '\x2', '\x3', '\x3', 
-		'\x2', '\t', '\f', '\x2', '\x32', '\x2', '\x13', '\x3', '\x2', '\x2', 
-		'\x2', '\x4', '\x19', '\x3', '\x2', '\x2', '\x2', '\x6', '\x1D', '\x3', 
-		'\x2', '\x2', '\x2', '\b', '\"', '\x3', '\x2', '\x2', '\x2', '\n', '$', 
-		'\x3', '\x2', '\x2', '\x2', '\f', '&', '\x3', '\x2', '\x2', '\x2', '\xE', 
-		'*', '\x3', '\x2', '\x2', '\x2', '\x10', '.', '\x3', '\x2', '\x2', '\x2', 
-		'\x12', '\x14', '\x5', '\x4', '\x3', '\x2', '\x13', '\x12', '\x3', '\x2', 
-		'\x2', '\x2', '\x14', '\x15', '\x3', '\x2', '\x2', '\x2', '\x15', '\x13', 
-		'\x3', '\x2', '\x2', '\x2', '\x15', '\x16', '\x3', '\x2', '\x2', '\x2', 
-		'\x16', '\x17', '\x3', '\x2', '\x2', '\x2', '\x17', '\x18', '\a', '\x2', 
-		'\x2', '\x3', '\x18', '\x3', '\x3', '\x2', '\x2', '\x2', '\x19', '\x1A', 
-		'\x5', '\x6', '\x4', '\x2', '\x1A', '\x1B', '\a', '\b', '\x2', '\x2', 
-		'\x1B', '\x1C', '\x5', '\b', '\x5', '\x2', '\x1C', '\x5', '\x3', '\x2', 
-		'\x2', '\x2', '\x1D', '\x1E', '\a', '\f', '\x2', '\x2', '\x1E', '\a', 
-		'\x3', '\x2', '\x2', '\x2', '\x1F', '#', '\x5', '\n', '\x6', '\x2', ' ', 
-		'#', '\x5', '\f', '\a', '\x2', '!', '#', '\x5', '\xE', '\b', '\x2', '\"', 
-		'\x1F', '\x3', '\x2', '\x2', '\x2', '\"', ' ', '\x3', '\x2', '\x2', '\x2', 
-		'\"', '!', '\x3', '\x2', '\x2', '\x2', '#', '\t', '\x3', '\x2', '\x2', 
-		'\x2', '$', '%', '\t', '\x2', '\x2', '\x2', '%', '\v', '\x3', '\x2', '\x2', 
-		'\x2', '&', '\'', '\a', '\x3', '\x2', '\x2', '\'', '(', '\x5', '\x10', 
-		'\t', '\x2', '(', ')', '\a', '\x4', '\x2', '\x2', ')', '\r', '\x3', '\x2', 
-		'\x2', '\x2', '*', '+', '\a', '\x5', '\x2', '\x2', '+', ',', '\x5', '\x10', 
-		'\t', '\x2', ',', '-', '\a', '\x6', '\x2', '\x2', '-', '\xF', '\x3', '\x2', 
-		'\x2', '\x2', '.', '\x33', '\x5', '\b', '\x5', '\x2', '/', '\x30', '\a', 
-		'\a', '\x2', '\x2', '\x30', '\x32', '\x5', '\b', '\x5', '\x2', '\x31', 
-		'/', '\x3', '\x2', '\x2', '\x2', '\x32', '\x35', '\x3', '\x2', '\x2', 
-		'\x2', '\x33', '\x31', '\x3', '\x2', '\x2', '\x2', '\x33', '\x34', '\x3', 
-		'\x2', '\x2', '\x2', '\x34', '\x11', '\x3', '\x2', '\x2', '\x2', '\x35', 
-		'\x33', '\x3', '\x2', '\x2', '\x2', '\x5', '\x15', '\"', '\x33',
+		'\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', 
+		'\x4', '\x3', '\x4', '\x3', '\x5', '\x3', '\x5', '\x3', '\x5', '\x5', 
+		'\x5', '$', '\n', '\x5', '\x3', '\x6', '\x3', '\x6', '\x3', '\a', '\x3', 
+		'\a', '\x3', '\a', '\x3', '\a', '\x3', '\b', '\x3', '\b', '\x3', '\b', 
+		'\x3', '\b', '\x3', '\t', '\x3', '\t', '\x3', '\t', '\a', '\t', '\x33', 
+		'\n', '\t', '\f', '\t', '\xE', '\t', '\x36', '\v', '\t', '\x3', '\t', 
+		'\x2', '\x2', '\n', '\x2', '\x4', '\x6', '\b', '\n', '\f', '\xE', '\x10', 
+		'\x2', '\x3', '\x3', '\x2', '\n', '\r', '\x2', '\x33', '\x2', '\x13', 
+		'\x3', '\x2', '\x2', '\x2', '\x4', '\x19', '\x3', '\x2', '\x2', '\x2', 
+		'\x6', '\x1E', '\x3', '\x2', '\x2', '\x2', '\b', '#', '\x3', '\x2', '\x2', 
+		'\x2', '\n', '%', '\x3', '\x2', '\x2', '\x2', '\f', '\'', '\x3', '\x2', 
+		'\x2', '\x2', '\xE', '+', '\x3', '\x2', '\x2', '\x2', '\x10', '/', '\x3', 
+		'\x2', '\x2', '\x2', '\x12', '\x14', '\x5', '\x4', '\x3', '\x2', '\x13', 
+		'\x12', '\x3', '\x2', '\x2', '\x2', '\x14', '\x15', '\x3', '\x2', '\x2', 
+		'\x2', '\x15', '\x13', '\x3', '\x2', '\x2', '\x2', '\x15', '\x16', '\x3', 
+		'\x2', '\x2', '\x2', '\x16', '\x17', '\x3', '\x2', '\x2', '\x2', '\x17', 
+		'\x18', '\a', '\x2', '\x2', '\x3', '\x18', '\x3', '\x3', '\x2', '\x2', 
+		'\x2', '\x19', '\x1A', '\x5', '\x6', '\x4', '\x2', '\x1A', '\x1B', '\a', 
+		'\b', '\x2', '\x2', '\x1B', '\x1C', '\x5', '\b', '\x5', '\x2', '\x1C', 
+		'\x1D', '\a', '\t', '\x2', '\x2', '\x1D', '\x5', '\x3', '\x2', '\x2', 
+		'\x2', '\x1E', '\x1F', '\a', '\r', '\x2', '\x2', '\x1F', '\a', '\x3', 
+		'\x2', '\x2', '\x2', ' ', '$', '\x5', '\n', '\x6', '\x2', '!', '$', '\x5', 
+		'\f', '\a', '\x2', '\"', '$', '\x5', '\xE', '\b', '\x2', '#', ' ', '\x3', 
+		'\x2', '\x2', '\x2', '#', '!', '\x3', '\x2', '\x2', '\x2', '#', '\"', 
+		'\x3', '\x2', '\x2', '\x2', '$', '\t', '\x3', '\x2', '\x2', '\x2', '%', 
+		'&', '\t', '\x2', '\x2', '\x2', '&', '\v', '\x3', '\x2', '\x2', '\x2', 
+		'\'', '(', '\a', '\x3', '\x2', '\x2', '(', ')', '\x5', '\x10', '\t', '\x2', 
+		')', '*', '\a', '\x4', '\x2', '\x2', '*', '\r', '\x3', '\x2', '\x2', '\x2', 
+		'+', ',', '\a', '\x5', '\x2', '\x2', ',', '-', '\x5', '\x10', '\t', '\x2', 
+		'-', '.', '\a', '\x6', '\x2', '\x2', '.', '\xF', '\x3', '\x2', '\x2', 
+		'\x2', '/', '\x34', '\x5', '\b', '\x5', '\x2', '\x30', '\x31', '\a', '\a', 
+		'\x2', '\x2', '\x31', '\x33', '\x5', '\b', '\x5', '\x2', '\x32', '\x30', 
+		'\x3', '\x2', '\x2', '\x2', '\x33', '\x36', '\x3', '\x2', '\x2', '\x2', 
+		'\x34', '\x32', '\x3', '\x2', '\x2', '\x2', '\x34', '\x35', '\x3', '\x2', 
+		'\x2', '\x2', '\x35', '\x11', '\x3', '\x2', '\x2', '\x2', '\x36', '\x34', 
+		'\x3', '\x2', '\x2', '\x2', '\x5', '\x15', '#', '\x34',
 	};
 
 	public static readonly ATN _ATN =
