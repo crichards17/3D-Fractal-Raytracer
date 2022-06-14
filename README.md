@@ -136,3 +136,15 @@ The Mandlebulb shape itself was displaying well, but certainly missing some visu
 <img src="https://github.com/crichards17/BoxRayTracer/blob/main/Progression/Captures/03-25_Mandlebulb_Occluded.PNG?raw=true" height="300" name="Occluded Mandlebulb" style="display:block;">
 <br><br>
 
+### Antlr
+
+My next target is a significant refactor of the way that render parameters are stored, manipulated by the user, and externalized. I mentioned earlier in this blog that the ultimate goal of this application is to integrate with a future GPU-side renderer. The intent there is that because GPU rendering can be difficult to troubleshoot, I would like to be able to export a "snapshot" of a given rendered scene (by way of its parameters) from the GPU side, pull them into this CPU-side renderer, and use it to debug.
+
+To do this, I'll need to define a structure for communicating these render parameters, and have a pipeline for intaking, tokenizing, and storing them. Here I've decided to stretch myself and write a grammar and Visitors with Antlr4. You can see my initial Antlr learning process [here in my Antlr arithmetic repository](https://github.com/crichards17/Antlr-Exploration). After lots of learning on that project, I feel confident that I can accomplish what I'm looking to do with Antlr here in the ray tracer.
+
+The first step is to define a grammar. This will be an evolving process as I discover new "language features" I'd like to add for extensibility, but you can see the current state of the grammer [here](https://github.com/crichards17/3D-Fractal-Raytracer/blob/main/Antlr/BRTSettingsTest.g4) in this repository.
+
+The other major portion to this refactor is in the frontend UI. Until now, the various render parameters have been bound to their respective WPF textboxes. This worked well as an initial pass at a UI to allow me to test the renderer during development, but was never intended to be the final interface. In place of the (messy) series of boxes and buttons, I'll use a single textbox that allows the user to input and/or update parameters using the grammar I've defined. This will be accompanied by the ability to save a rendering configuration to a file, or load one of those files into the input field. Below is the current version of this updated UI, with the deprecated parameter binding removed:
+
+<img src="https://github.com/crichards17/BoxRayTracer/blob/main/Progression/Captures/Config_UI.PNG?raw=true" height="300" name="Occluded Mandlebulb" style="display:block;">
+<br><br>
