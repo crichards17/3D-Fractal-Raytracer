@@ -24,6 +24,9 @@ This application is being developed with twofold purpose:
     * I referenced [this page](https://learnopengl.com/Advanced-Lighting/Advanced-Lighting) from Learn OpenGL to learn about the Blinn-Phong model and its mathematical implementation.
 * 3D Fractals
     * [Mandlebulb.com](https://www.mandelbulb.com/3d-fractal-art-mandelmorphs/) hosts a helpful primer on 3-dimensional fractals.
+* Antlr4
+    * As described on [Antlr.org](https://www.antlr.org/): "Antlr (ANother Tool for Language Recognition) is a powerful parser generator for reading, processing, executing, or translating structured text or binary files. It's widely used to build languages, tools, and frameworks. From a grammar, ANTLR generates a parser that can build and walk parse trees.
+    * In preparation for using Antlr in this project, I first built a grammar and lexer-parser for evaluating arithmetic expressions, which you can see [here!](https://github.com/crichards17/Antlr-Exploration)
 
 ## Development
 The remainder of this document will serve as a development journal for recording progress, challenges, and milestones.
