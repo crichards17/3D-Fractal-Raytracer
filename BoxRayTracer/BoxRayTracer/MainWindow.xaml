@@ -614,9 +614,11 @@
                         Grid.Row="1"
                         VerticalAlignment="Stretch"
                         HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Center"
-                        KeyDown="OnKeyDownHandler"
+                        HorizontalContentAlignment="Left"
                         Margin="5,5,5,5"
+                        AcceptsReturn="True"
+                        TextWrapping="Wrap"
+                        VerticalScrollBarVisibility="Auto"
                         />
 
             <Grid x:Name="footerBtnsGrid"
@@ -659,14 +661,14 @@
                     TextWrapping="Wrap" 
                     VerticalAlignment="Bottom"
                     />
-                    <Button x:Name="btn_save" 
+                    <Button x:Name="btn_save_img" 
                     Content="Save Image"
                         Grid.Row="1"
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Center" 
                     Width="100" 
                     Height="29"
-                    Click="Button_Save_Click"/>
+                    Click="Button_Save_Image_Click"/>
 
                 </Grid>
             </Grid>

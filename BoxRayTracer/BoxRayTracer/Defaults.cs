@@ -13,29 +13,12 @@ namespace BoxRayTracer
     internal class Defaults
     {
         // Camera defaults
-        public const double camPosX = -2;
-        public const double camPosY = 0.5;
-        public const double camPosZ = 2;
+        public static Vector camPos = new Vector(-2, 0.5, 2);
 
-        public const double camFrusX = 1;
-        public const double camFrusY = -0.2;
-        public const double camFrusZ = -1;
+        public static Vector camFrus = new Vector(1, -0.2, -1);
 
         public const double fov = 50;
 
-        // Object defaults
-        public const double objPosX = 0;
-        public const double objPosY = 0;
-        public const double objPosZ = 0;
-
-        // Shape defaults
-        public static readonly string[] shapeList = new string[] { "Sphere" };
-        public const int shapeDefaultIndex = 0;
-        public const double radius = 1;
-
-        // Color defaults
-        public static readonly string objColor = "White";
-        public static readonly string backColor = "Black";
 
         // Render defaults
         public const double maxDist = 20;
@@ -51,7 +34,7 @@ namespace BoxRayTracer
         public const int maxReflections = 0;
 #endif
 
-        // Light defaults
+        // Ambient
         private static readonly AmbientLight globalAmbient1 = new AmbientLight(new Color(0.95, 1.0, 1.0), 1.0);
         public static readonly Color globalAmbientColor = new Color(0.95, 1.0, 1.0);
         public static readonly double globalAmbientIntensity = 1.0;

@@ -1,6 +1,4 @@
-﻿#define DefaultObjects
-
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Drawing;
@@ -17,7 +15,7 @@ namespace BoxRayTracer
         public MainWindow()
         {
             InitializeComponent();
-            SetDefaults();
+            // SetDefaults();
             RunRender();
         }
 
@@ -27,17 +25,31 @@ namespace BoxRayTracer
             RunRender();
         }
 
+        /* Button_Default_Click deprecated with move from UI-bound params
         private void Button_Default_Click(object sender, RoutedEventArgs e)
         {
             SetDefaults();
         }
+        */
 
-        private void Button_Save_Click(object sender, RoutedEventArgs e)
+        private void Button_Save_Image_Click(object sender, RoutedEventArgs e)
         {
             if (imgTitle.Text != "")
             {
-                Save(currentBmp, imgTitle.Text);
+                SaveImage(currentBmp, imgTitle.Text);
             }
+        }
+
+        // TODO
+        private void Button_Load_Config_Click(object sender, RoutedEventArgs e)
+        {
+            // Load config from file
+        }
+
+        //TODO
+        private void Button_Save_Config_Click(object sender, RoutedEventArgs e)
+        {
+            // Save config to file
         }
 
         private void OnKeyDownHandler(object sender, KeyEventArgs e)
@@ -52,12 +64,12 @@ namespace BoxRayTracer
         #region helpers
         private void RunRender()
         {
-            imageContainer.Width = double.Parse(resXBox.Text);
-            imageContainer.Height = double.Parse(resYBox.Text);
+            imageContainer.Width = Defaults.imgWidth;
+            imageContainer.Height = Defaults.imgHeight;
             BitmapRaytracer bmpTracer = GetBRT();
             currentBmp = BitmapToImageSource(bmpTracer.Render());
             imageContainer.Source = currentBmp;
-            SetParamFields(bmpTracer);
+            // SetParamFields(bmpTracer);
         }
         
         private static BitmapImage BitmapToImageSource(Bitmap bitmap)
@@ -76,7 +88,7 @@ namespace BoxRayTracer
             }
         }
 
-        private static void Save(BitmapImage image, string fileName)
+        private static void SaveImage(BitmapImage image, string fileName)
         {
             BitmapEncoder encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(image));
@@ -89,6 +101,7 @@ namespace BoxRayTracer
             }
         }
 
+        /* SetParamFields deprecated with move from UI-bound params 
         private void SetParamFields(BitmapRaytracer bmpTracer)
         {
             bmpTracer.GetSceneParams(out Vector camPos, out Vector camFrus, out Vector camRoll);
@@ -104,13 +117,12 @@ namespace BoxRayTracer
             camRollX.Text = $"{camRoll.x}";
             camRollY.Text = $"{camRoll.y}";
             camRollZ.Text = $"{camRoll.z}";
-        }
+        } */
 
+        /* SetDefaults deprecated with move from UI-bound params 
         private void SetDefaults()
         {
-            // TODO: Will remove the need for this method
-            //  by binding UI fields to BRT properties directly.
-            //  Will set defaults on BRT initialization
+            //  Set defaults on BRT initialization
             objPosX.Text = Defaults.objPosX.ToString();
             objPosY.Text = Defaults.objPosY.ToString();
             objPosZ.Text = Defaults.objPosZ.ToString();
@@ -141,45 +153,25 @@ namespace BoxRayTracer
             resXBox.Text = Defaults.imgWidth.ToString();
             resYBox.Text = Defaults.imgHeight.ToString();
         }
+        */
 
         private BitmapRaytracer GetBRT()
         {
+            /* Deprecated by move from UI-bound params
             System.Windows.Media.Color objColorMedia = (System.Windows.Media.Color)(objColorSelector.SelectedItem as System.Reflection.PropertyInfo).GetValue(null, null);
             Scene.Color objColorScene = new Scene.Color((double)objColorMedia.R / 255, (double)objColorMedia.G / 255, (double)objColorMedia.B / 255);
-#if DefaultObjects 
+            */
+
             SceneObjectEstimatable[] objects = Defaults.sceneObjects;
-#else
 
-            // TODO: Hook to object list and count from UI
-            ISceneObjectEstimatable[] objects = new ISceneObjectEstimatable[count];
-            for (int i = 0; i < count; i++) 
-            { 
-                switch (shapeSelector.SelectedItem) {
-                    case "Sphere":
-                        objects[i] = new Sphere(new Vector(double.Parse(objPosX.Text), double.Parse(objPosY.Text), double.Parse(objPosZ.Text)), objColorScene, radius);
-                        break;
-                    // TODO: Default behavior?
-                    default:
-                        break;
-                }
-            }
-#endif
-
-            // TODO: Handle invalid text entry
-            Vector camPos = new Vector(double.Parse(camPosX.Text), double.Parse(camPosY.Text), double.Parse(camPosZ.Text));
+            Vector camPos = Defaults.camPos;
             
-            // TODO: Refactor to "Look At" entry rather than camFrus. 
-            Vector camFrus = new Vector(double.Parse(camFrusX.Text), double.Parse(camFrusY.Text), double.Parse(camFrusZ.Text));
+            Vector camFrus = Defaults.camFrus;
 
-            // Get Color selections from the UI color picker, convert to Scene.Color objects
-            
-            System.Windows.Media.Color backColorMedia = (System.Windows.Media.Color)(backColorSelector.SelectedItem as System.Reflection.PropertyInfo).GetValue(null, null);
-            //Scene.Color backColorScene = new Scene.Color((double)backColorMedia.R / 255, (double)backColorMedia.G / 255, (double)backColorMedia.B / 255);
             Scene.Color backColorScene = Defaults.globalAmbientColor * Defaults.globalAmbientIntensity;
 
-            // TODO: Pass lights from UI / state to brt
             SceneStage sceneStage = new SceneStage(objects, Defaults.sceneLights, backColorScene);
-            BitmapRaytracer brt = new (sceneStage, Defaults.maxDist, (int)imageContainer.Width, (int)imageContainer.Height, double.Parse(fovBox.Text), camPos, camPos + camFrus);
+            BitmapRaytracer brt = new (sceneStage, Defaults.maxDist, (int)imageContainer.Width, (int)imageContainer.Height, Defaults.fov, camPos, camPos + camFrus);
             return brt;
         }
 
