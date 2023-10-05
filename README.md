@@ -89,7 +89,7 @@ So far, the scene had been exclusively composed of a single image. This next bit
 
 ### Shadow Rays
 
-The next component of the lighting model to be implemented were shadow rays. Shadows in this rendering model are calculated by ray marching from the incident object fragment toward each light source, and checking for intersection with any of the scene objects along the way. If an object is intersected, then the diffuse and specular components from that light are not added to the color that's returned to the pixel array. The result is a shadow cast from each object onto the others, as demonstrated in the below image which has the purple light axis-aligned with the two objects and casting a shadow onto the square on the right.
+The next component of the lighting model to be implemented were shadow rays. Shadows in this rendering model are calculated by ray marching from the incident object fragment toward each light source, and checking for intersection with any of the scene objects along the way. If an object is intersected, then the diffuse and specular components from that light are not added to the color that's returned to the pixel array. The result is a shadow cast from each object onto the others, as demonstrated in the below image which has the purple light axis-aligned with the two objects and casting a shadow onto the sphere on the right.
 
 <img src="https://github.com/crichards17/BoxRayTracer/blob/main/Progression/Captures/02-26_First_Shadows.PNG?raw=true" height="300" name="Multiple_Objects" style="display:block;">
 <br><br>
@@ -107,7 +107,7 @@ The box shape is more challenging. The distance from a given point to the surfac
 
 ### Box DE Transforms
 
-The initial box implementation above show a symmetrical cube, axis-aligned at the global origin. This was a good example of narrowing scope to allow me to tackle a problem one portion at a time. The next step, then, was to expand the Box functionality to allow for transformrations and translations. This work will also be generalized for use in other shapes, as it mostly involves re-framing the DE calculation around the object's local coordinates by transposign the input vector from the global space -- something that's aplicable to any complex shape. 
+The initial box implementation above show a symmetrical cube, axis-aligned at the global origin. This was a good example of narrowing scope to allow me to tackle a problem one portion at a time. The next step, then, was to expand the Box functionality to allow for transformations and translations. This work will also be generalized for use in other shapes, as it mostly involves re-framing the DE calculation around the object's local coordinates by transposing the input vector from the global space -- something that's aplicable to any complex shape. 
 
 <img src="https://github.com/crichards17/BoxRayTracer/blob/main/Progression/Captures/03-10_Scale_Transform_Box.PNG?raw=true" height="300" name="Box Transforms" style="display:block;">
 <br><br>
